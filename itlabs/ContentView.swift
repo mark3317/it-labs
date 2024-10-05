@@ -9,10 +9,9 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            ForEach(fibonacciSequence(count: 20), id: \.self) { number in
-                Text("\(number)")
-            }
+        List(fibonacciSequence(count: 20), id: \.self) {
+            Text("\($0)")
+                .frame(maxWidth: .infinity, alignment: .center)
         }
     }
 }
