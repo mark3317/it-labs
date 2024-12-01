@@ -1,11 +1,3 @@
-//
-//  HomeViewModel.swift
-//  cost-control
-//
-//  Created by Mark Nokhrin on 01.12.2024.
-//
-
-// HomeViewModel.swift
 import Foundation
 import Combine
 
@@ -19,9 +11,15 @@ class HomeViewModel: HomeActions, ObservableObject {
     func loadData() {
         // Пример данных
         let transactions = [
-            Cost(amount: 100.0, description: "Salary", date: Date(), type: .income),
-            Cost(amount: 50.0, description: "Groceries", date: Date(), type: .expense),
-            Cost(amount: 150.0, description: "Groceries", date: Date(), type: .income)
+            Transaction(amount: 100.0, description: "Salary", date: Date(), type: .income, category: nil),
+            Transaction(amount: 50.0, description: "Groceries", date: Date(), type: .expense, category: nil),
+            Transaction(amount: 150.0, description: "Groceries", date: Date(), type: .expense, category: nil),
+            Transaction(amount: 150.0, description: "Groceries", date: Date(), type: .expense, category: nil),
+            Transaction(amount: 200.0, description: "Groceries", date: Date(), type: .expense, category: nil),
+            Transaction(amount: 30.0, description: "Groceries", date: Date(), type: .income, category: nil),
+            Transaction(amount: 120.0, description: "Groceries", date: Date(), type: .expense, category: nil),
+            Transaction(amount: 50.0, description: "Groceries", date: Date(), type: .expense, category: nil),
+            Transaction(amount: 510.0, description: "Groceries", date: Date(), type: .expense, category: nil)
         ]
 
         self.uiState = self.uiState.copy(

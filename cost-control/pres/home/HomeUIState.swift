@@ -1,17 +1,10 @@
-//
-//  HomeUIState.swift
-//  cost-control
-//
-//  Created by Mark Nokhrin on 01.12.2024.
-//
-
 import Foundation
 
 struct HomeUIState {
     let totalIncome: Double
     let totalExpense: Double
     let balance: Double
-    let recentTransactions: [Cost]
+    let transactions: [Transaction]
 }
 
 extension HomeUIState {
@@ -19,7 +12,7 @@ extension HomeUIState {
         totalIncome: 0,
         totalExpense: 0,
         balance: 0,
-        recentTransactions: []
+        transactions: []
     )
 }
 
@@ -28,13 +21,15 @@ extension HomeUIState {
         totalIncome: Double? = nil,
         totalExpense: Double? = nil,
         balance: Double? = nil,
-        recentTransactions: [Cost]? = nil
+        recentTransactions: [Transaction]? = nil
     ) -> HomeUIState {
-        return HomeUIState(
+        let newUiState = HomeUIState(
             totalIncome: totalIncome ?? self.totalIncome,
             totalExpense: totalExpense ?? self.totalExpense,
             balance: balance ?? self.balance,
-            recentTransactions: recentTransactions ?? self.recentTransactions
+            transactions: recentTransactions ?? self.transactions
         )
+        print(newUiState)
+        return newUiState
     }
 }

@@ -1,71 +1,99 @@
-//
-//  HomeView.swift
-//  cost-control
-//
-//  Created by Mark Nokhrin on 01.12.2024.
-//
-
 import SwiftUI
 
 struct HomeView: View {
     @StateObject private var viewModel = HomeViewModel()
-
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                HStack {
-                    VStack(alignment: .leading) {
-                        Text("Общий доход")
-                            .font(.headline)
-                        Text("\(viewModel.uiState.totalIncome, specifier: "%.2f") ₽")
-                            .font(.title)
-                    }
-                    .padding()
-                    Spacer()
-                    VStack(alignment: .leading) {
-                        Text("Общий расход")
-                            .font(.headline)
-                        Text("\(viewModel.uiState.totalExpense, specifier: "%.2f") ₽")
-                            .font(.title)
-                    }
-                    .padding()
-                }
-                .background(Color.blue.opacity(0.1))
-                .cornerRadius(10)
-                .padding()
-
-                VStack(alignment: .leading) {
-                    Text("Баланс")
-                        .font(.headline)
-                    Text("\(viewModel.uiState.balance, specifier: "%.2f") ₽")
-                        .font(.title)
-                }
-                .padding()
-                .background(Color.green.opacity(0.1))
-                .cornerRadius(10)
-                .padding()
-
-                Text("Последние операции")
-                    .font(.headline)
-                    .padding()
-
-                List(viewModel.uiState.recentTransactions) { transaction in
+        NavigationStack {
+            ScrollView {
+                VStack {
                     HStack {
-                        VStack(alignment: .leading) {
-                            Text(transaction.description)
-                                .font(.headline)
-                            Text("\(transaction.date, formatter: DateFormatter.shortDate)")
-                                .font(.subheadline)
-                        }
                         Spacer()
-                        Text("\(transaction.amount, specifier: "%.2f") ₽")
+                        VStack(alignment: .leading) {
+                            Text("Расходы")
+                                .font(.headline)
+                                .foregroundColor(Color.black)
+                            Text("\(viewModel.uiState.totalExpense, specifier: "%.2f") ₽")
+                                .font(.title)
+                                .foregroundColor(Color.black)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                        }
+                        .padding()
+                        .frame(maxWidth: 200)
+                        Spacer()
+                        Divider()
+                            .frame(height: 50)
+                            .background(Color.gray)
+                        Spacer()
+                        VStack(alignment: .leading) {
+                            Text("Доходы")
+                                .font(.headline)
+                                .foregroundColor(Color.black)
+                            Text("\(viewModel.uiState.totalIncome, specifier: "%.2f") ₽")
+                                .font(.title)
+                                .foregroundColor(Color.black)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.5)
+                        }
+                        .padding()
+                        .frame(maxWidth: 200)
+                        Spacer()
+                    }
+                    .background(Color.blue.opacity(0.1))
+                    .cornerRadius(50)
+                    .padding()
+                    
+                    VStack {
+                        Text("Остаток")
                             .font(.headline)
-                            .foregroundColor(transaction.type == .income ? .green : .red)
+                        Text("\(viewModel.uiState.balance, specifier: "%.2f") ₽")
+                            .font(.title)
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.5)
                     }
                     .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(Color.green.opacity(0.1))
+                    .cornerRadius(50)
+                    .padding()
+                    
+                    Text("Последние операции")
+                        .font(.headline)
+                        .padding()
+                    
+                    Divider()
+                    
+                    
+                    ForEach(viewModel.uiState.transactions.indices, id: \.self) { index in
+                        HStack {
+                            VStack(alignment: .leading) {
+                                Text(viewModel.uiState.transactions[index].description)
+                                    .font(.headline)
+                                Text("\(viewModel.uiState.transactions[index].date, formatter: DateFormatter.shortDate)")
+                                    .font(.subheadline)
+                            }
+                            Spacer()
+                            Text("\(viewModel.uiState.transactions[index].amount, specifier: "%.2f") ₽")
+                                .font(.headline)
+                                .foregroundColor(viewModel.uiState.transactions[index].type == .income ? .green : .red)
+                        }
+                        .padding()
+                        
+                        if index < viewModel.uiState.transactions.count - 1 {
+                            Divider()
+                        }
+                    }
                 }
             }
-            .navigationTitle("Главная")
+            .navigationBarTitle("Главная")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarItems(
+                trailing: NavigationLink(destination: AddTransactionView()) {
+                    Image(systemName: "plus")
+                        .imageScale(.large)
+                }
+            )
         }
     }
 }
@@ -76,4 +104,8 @@ extension DateFormatter {
         formatter.dateStyle = .short
         return formatter
     }
+}
+
+#Preview {
+    HomeView()
 }
