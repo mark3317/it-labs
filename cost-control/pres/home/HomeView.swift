@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct HomeView: View {
-    @StateObject private var viewModel = HomeViewModel()
+struct HomeView<ViewModel>: View where ViewModel: HomeViewModel {
+    @ObservedObject var viewModel: ViewModel
     
     var body: some View {
         NavigationStack {
@@ -89,7 +89,9 @@ struct HomeView: View {
             .navigationBarTitle("Главная")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
-                trailing: NavigationLink(destination: AddTransactionView()) {
+                trailing: NavigationLink(
+                    destination: AddTransactionView(viewModel: AddTransactionProcessor())
+                ) {
                     Image(systemName: "plus")
                         .imageScale(.large)
                 }
@@ -107,5 +109,5 @@ extension DateFormatter {
 }
 
 #Preview {
-    HomeView()
+    HomeView(viewModel: HomeProcessor())
 }

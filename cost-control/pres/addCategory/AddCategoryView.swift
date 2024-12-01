@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct AddCategoryView: View {
-    @StateObject private var viewModel = AddCategoryViewModel()
+struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
+    @ObservedObject var viewModel: ViewModel
     
     var body: some View {
         NavigationStack {
@@ -13,5 +13,5 @@ struct AddCategoryView: View {
 }
 
 #Preview {
-    AddCategoryView()
+    AddCategoryView(viewModel: AddCategoryProcessor())
 }

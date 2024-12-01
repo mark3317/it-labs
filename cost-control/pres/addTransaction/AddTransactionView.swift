@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct AddTransactionView: View {
-    @StateObject private var viewModel = AddTransactionViewModel()
+struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewModel {
+    @ObservedObject var viewModel: ViewModel
     @State private var amountInput: Double = 0
     @State private var descriptionInput: String = ""
     @State private var typeInput: TypeTransaction = .expense
@@ -109,5 +109,5 @@ struct AddTransactionView: View {
 }
 
 #Preview {
-    AddTransactionView()
+    AddTransactionView(viewModel: AddTransactionProcessor())
 }
