@@ -5,19 +5,19 @@ class AddCategoryProcessor: AddCategoryViewModel {
     @Published var uiState = AddCategoryUIState.initial
     
     func editName(_ name: String) {
-        self.uiState = self.uiState.copy(name: name)
+        uiState = uiState.copy(name: name)
     }
     
     func editColor(_ color: Color) {
-        self.uiState = self.uiState.copy(color: color)
+        uiState = uiState.copy(color: color)
     }
     
     func editType(_ type: TypeTransaction) {
-        self.uiState = self.uiState.copy(type: type)
+        uiState = uiState.copy(type: type)
     }
     
     func editIcon(_ icon: String) {
-        self.uiState = self.uiState.copy(icon: icon)
+        uiState = uiState.copy(icon: icon)
     }
     
     func onClickAddCategory() {

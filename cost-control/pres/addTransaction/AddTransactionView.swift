@@ -2,10 +2,18 @@ import SwiftUI
 
 struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewModel {
     @ObservedObject var viewModel: ViewModel
-    @State private var amountInput: Double = 0
-    @State private var descriptionInput: String = ""
-    @State private var typeInput: TypeTransaction = .expense
-    @State private var dateInput: Date = Date()
+    @State private var amountInput: Double
+    @State private var descriptionInput: String
+    @State private var typeInput: TypeTransaction
+    @State private var dateInput: Date
+    
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+        self.amountInput = viewModel.uiState.amount
+        self.descriptionInput = viewModel.uiState.description
+        self.typeInput = viewModel.uiState.type
+        self.dateInput = viewModel.uiState.date
+    }
     
     var body: some View {
         NavigationStack {
@@ -13,9 +21,9 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                 Section(header: Text("Сумма")) {
                     TextField("Введите сумму операции", value: $amountInput, format: .number)
                         .keyboardType(.decimalPad)
-                        .onChange(of: self.amountInput) {
-                            viewModel.editAmount(self.amountInput)
-                            self.amountInput = viewModel.uiState.amount
+                        .onChange(of: amountInput) {
+                            viewModel.editAmount(amountInput)
+                            amountInput = viewModel.uiState.amount
                         }
                         .overlay(
                             HStack {
@@ -28,9 +36,9 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                 
                 Section(header: Text("Описание")) {
                     TextField("Введите описание", text: $descriptionInput)
-                        .onChange(of: self.descriptionInput) {
-                            viewModel.editDescription(self.descriptionInput)
-                            self.descriptionInput = viewModel.uiState.description
+                        .onChange(of: descriptionInput) {
+                            viewModel.editDescription(descriptionInput)
+                            descriptionInput = viewModel.uiState.description
                         }
                 }
                 
@@ -39,8 +47,8 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                         .datePickerStyle(CompactDatePickerStyle())
                         .environment(\.locale, Locale(identifier: "ru_RU"))
                         .onChange(of: dateInput ) {
-                            viewModel.editDate(self.dateInput)
-                            self.dateInput = viewModel.uiState.date
+                            viewModel.editDate(dateInput)
+                            dateInput = viewModel.uiState.date
                         }
                 }
                 
@@ -52,8 +60,8 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                     }
                     .pickerStyle(SegmentedPickerStyle())
                     .onChange(of: typeInput) {
-                        viewModel.editType(self.typeInput)
-                        self.typeInput = viewModel.uiState.type
+                        viewModel.editType(typeInput)
+                        typeInput = viewModel.uiState.type
                     }
                 }
                 
@@ -98,12 +106,6 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                 .listRowBackground(Color.clear)
             }
             .navigationBarTitle("Добавление операции", displayMode: .inline)
-            .onAppear {
-                self.amountInput = viewModel.uiState.amount
-                self.descriptionInput = viewModel.uiState.description
-                self.typeInput = viewModel.uiState.type
-                self.dateInput = viewModel.uiState.date
-            }
         }
     }
 }
