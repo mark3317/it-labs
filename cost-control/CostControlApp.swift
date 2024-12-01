@@ -1,14 +1,14 @@
 //
-//  lab0App.swift
-//  lab0
+//  CostControlApp.swift
+//  cost-control
 //
-//  Created by Mark Nokhrin on 05.10.2024.
+//  Created by Mark Nokhrin on 30.11.2024.
 //
 
 import SwiftUI
 
 @main
-struct lab0App: App {
+struct CostControlApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView()
