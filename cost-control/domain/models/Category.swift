@@ -1,6 +1,6 @@
 import Foundation
 
-struct CategoryEntity {
+struct Category: Equatable, Identifiable {
     let id = UUID()
     let name: String
     let colorHex: String

@@ -7,6 +7,11 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
     @State private var typeInput: TypeTransaction
     @State private var dateInput: Date
     
+    private enum Field: Int, CaseIterable {
+        case amount, description
+    }
+    @FocusState private var focusedField: Field?
+    
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
         self.amountInput = viewModel.uiState.amount
@@ -21,6 +26,7 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                 Section(header: Text("Сумма")) {
                     TextField("Введите сумму операции", value: $amountInput, format: .number)
                         .keyboardType(.decimalPad)
+                        .focused($focusedField, equals: Field.amount)
                         .onChange(of: amountInput) {
                             viewModel.editAmount(amountInput)
                             amountInput = viewModel.uiState.amount
@@ -36,6 +42,7 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                 
                 Section(header: Text("Описание")) {
                     TextField("Введите описание", text: $descriptionInput)
+                        .focused($focusedField, equals: Field.description)
                         .onChange(of: descriptionInput) {
                             viewModel.editDescription(descriptionInput)
                             descriptionInput = viewModel.uiState.description
@@ -61,7 +68,6 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                     .pickerStyle(SegmentedPickerStyle())
                     .onChange(of: typeInput) {
                         viewModel.editType(typeInput)
-                        typeInput = viewModel.uiState.type
                     }
                 }
                 
@@ -73,7 +79,7 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                             VStack {
                                 ZStack {
                                     Circle()
-                                        .fill(viewModel.uiState.category == category ? category.color : Color.gray.opacity(0.3))
+                                        .fill(viewModel.uiState.category == category ? Color(hex: category.colorHex) : Color.gray.opacity(0.3))
                                         .frame(width: 60, height: 60)
                                     Image(systemName: category.icon)
                                         .foregroundColor(.white)
@@ -89,8 +95,17 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                         }
                     }
                 }
-                
-                Section {
+            }
+            .navigationBarTitle("Добавление операции", displayMode: .inline)
+            .toolbar(.hidden, for: .tabBar)
+            .toolbarBackground(Color.clear, for: .bottomBar)
+            .toolbar {
+                ToolbarItem(placement: .keyboard) {
+                    Button("Готово") {
+                        focusedField = nil
+                    }
+                }
+                ToolbarItem(placement: .bottomBar) {
                     Button(action: {
                         viewModel.onClickAddTransaction()
                     }) {
@@ -102,10 +117,9 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                             .cornerRadius(30)
                             .font(.headline)
                     }
+                    .padding()
                 }
-                .listRowBackground(Color.clear)
             }
-            .navigationBarTitle("Добавление операции", displayMode: .inline)
         }
     }
 }

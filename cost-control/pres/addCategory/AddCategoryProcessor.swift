@@ -21,6 +21,6 @@ class AddCategoryProcessor: AddCategoryViewModel {
     }
     
     func onClickAddCategory() {
-        
+        print("Add category \(uiState)")
     }
 }

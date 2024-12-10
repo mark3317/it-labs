@@ -8,6 +8,11 @@ struct ContentView: View {
                     Image(systemName: "house.fill")
                     Text("Главная")
                 }
+            CategoriesView(viewModel: CategoriesProcessor())
+                .tabItem {
+                    Image(systemName: "list.bullet.rectangle.fill")
+                    Text("Категории")
+                }
         }
     }
 }

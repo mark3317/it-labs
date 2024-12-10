@@ -1,4 +1,5 @@
 import Foundation
+import SwiftUI
 
 class HomeProcessor: HomeViewModel {
     @Published var uiState = HomeUIState.initial
@@ -8,17 +9,24 @@ class HomeProcessor: HomeViewModel {
     }
     
     func loadData() {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd"
+        
+        let foodCategory = Category(name: "Еда", colorHex: Color.red.toHex(), type: .expense, icon: "fork.knife")
+        let salaryCategory = Category(name: "Зарплата", colorHex: Color.green.toHex(), type: .income, icon: "dollarsign.circle")
+        let entertainmentCategory = Category(name: "Развлечения", colorHex: Color.blue.toHex(), type: .expense, icon: "gamecontroller")
+        let investmentCategory = Category(name: "Инвестиции", colorHex: Color.purple.toHex(), type: .income, icon: "chart.bar")
         // Пример данных
         let transactions = [
-            Transaction(amount: 100.0, description: "Salary", date: Date(), type: .income, category: nil),
-            Transaction(amount: 50.0, description: "Groceries", date: Date(), type: .expense, category: nil),
-            Transaction(amount: 150.0, description: "Groceries", date: Date(), type: .expense, category: nil),
-            Transaction(amount: 150.0, description: "Groceries", date: Date(), type: .expense, category: nil),
-            Transaction(amount: 200.0, description: "Groceries", date: Date(), type: .expense, category: nil),
-            Transaction(amount: 30.0, description: "Groceries", date: Date(), type: .income, category: nil),
-            Transaction(amount: 120.0, description: "Groceries", date: Date(), type: .expense, category: nil),
-            Transaction(amount: 50.0, description: "Groceries", date: Date(), type: .expense, category: nil),
-            Transaction(amount: 510.0, description: "Groceries", date: Date(), type: .expense, category: nil)
+            Transaction(amount: 100.0, description: "Salary", date: dateFormatter.date(from: "2023-10-01")!, type: .income, category: salaryCategory),
+            Transaction(amount: 50.0, description: "Food", date: Date(), type: .expense, category: foodCategory),
+            Transaction(amount: 150.0, description: "Entertainment", date: dateFormatter.date(from: "2023-11-20")!, type: .expense, category: entertainmentCategory),
+            Transaction(amount: 150.0, description: "Investment", date: dateFormatter.date(from: "2023-12-6")!, type: .income, category: investmentCategory),
+            Transaction(amount: 150.0, description: "Investment", date: dateFormatter.date(from: "2023-12-6")!, type: .income, category: investmentCategory),
+            Transaction(amount: 100.0, description: "Salary", date: dateFormatter.date(from: "2023-11-11")!, type: .income, category: salaryCategory),
+            Transaction(amount: 50.0, description: "Food", date: dateFormatter.date(from: "2023-12-1")!, type: .expense, category: foodCategory),
+            Transaction(amount: 150.0, description: "Entertainment", date: dateFormatter.date(from: "2023-11-29")!, type: .expense, category: entertainmentCategory),
+            Transaction(amount: 150.0, description: "Investment", date: dateFormatter.date(from: "2023-12-3")!, type: .income, category: investmentCategory)
         ]
         
         uiState = uiState.copy(

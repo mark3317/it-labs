@@ -5,17 +5,17 @@ class AddTransactionProcessor: AddTransactionViewModel {
     
     init() {
         // Пример данных
-        let foodCategory = CategoryTransaction(name: "Еда", color: .red, type: .expense, icon: "fork.knife")
-        let salaryCategory = CategoryTransaction(name: "Зарплата", color: .green, type: .income, icon: "dollarsign.circle")
-        let entertainmentCategory = CategoryTransaction(name: "Развлечения", color: .blue, type: .expense, icon: "gamecontroller")
-        let investmentCategory = CategoryTransaction(name: "Инвестиции", color: .purple, type: .income, icon: "chart.bar")
-
+        let foodCategory = Category(name: "Еда", colorHex: Color.red.toHex(), type: .expense, icon: "fork.knife")
+        let salaryCategory = Category(name: "Зарплата", colorHex: Color.green.toHex(), type: .income, icon: "dollarsign.circle")
+        let entertainmentCategory = Category(name: "Развлечения", colorHex: Color.blue.toHex(), type: .expense, icon: "gamecontroller")
+        let investmentCategory = Category(name: "Инвестиции", colorHex: Color.purple.toHex(), type: .income, icon: "chart.bar")
+        
         uiState = uiState.copy(
             category: uiState.category,
             categories: [foodCategory, salaryCategory, entertainmentCategory, investmentCategory]
         )
     }
-
+    
     func editAmount(_ amount: Double) {
         let roundedAmount = (amount * 100).rounded() / 100
         uiState = uiState.copy(
@@ -45,7 +45,7 @@ class AddTransactionProcessor: AddTransactionViewModel {
         )
     }
     
-    func editCategory(_ category: CategoryTransaction) {
+    func editCategory(_ category: Category) {
         if (category == uiState.category) {
             uiState = uiState.copy(category: nil)
         } else {
