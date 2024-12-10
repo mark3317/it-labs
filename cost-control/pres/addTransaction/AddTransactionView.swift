@@ -29,7 +29,6 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                         .focused($focusedField, equals: Field.amount)
                         .onChange(of: amountInput) {
                             viewModel.editAmount(amountInput)
-                            amountInput = viewModel.uiState.amount
                         }
                         .overlay(
                             HStack {
@@ -45,7 +44,6 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                         .focused($focusedField, equals: Field.description)
                         .onChange(of: descriptionInput) {
                             viewModel.editDescription(descriptionInput)
-                            descriptionInput = viewModel.uiState.description
                         }
                 }
                 
@@ -55,7 +53,6 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                         .environment(\.locale, Locale(identifier: "ru_RU"))
                         .onChange(of: dateInput ) {
                             viewModel.editDate(dateInput)
-                            dateInput = viewModel.uiState.date
                         }
                 }
                 
@@ -79,7 +76,7 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                             VStack {
                                 ZStack {
                                     Circle()
-                                        .fill(viewModel.uiState.category == category ? Color(hex: category.colorHex) : Color.gray.opacity(0.3))
+                                        .fill(viewModel.uiState.selectedCategory == category ? Color(hex: category.colorHex) : Color.gray.opacity(0.3))
                                         .frame(width: 60, height: 60)
                                     Image(systemName: category.icon)
                                         .foregroundColor(.white)
@@ -120,6 +117,12 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                     .padding()
                 }
             }
+        }
+        .onChange(of: viewModel.uiState) {
+            amountInput = viewModel.uiState.amount
+            descriptionInput = viewModel.uiState.description
+            typeInput = viewModel.uiState.type
+            dateInput = viewModel.uiState.date
         }
     }
 }

@@ -13,6 +13,11 @@ struct ContentView: View {
                     Image(systemName: "list.bullet.rectangle.fill")
                     Text("Категории")
                 }
+            SettingsView(viewModel: SettingsProcessor())
+                .tabItem {
+                    Image(systemName: "gearshape.fill")
+                    Text("Настройки")
+                }
         }
     }
 }

@@ -6,7 +6,7 @@ struct AddTransactionUIState: Equatable {
     let description: String
     let date: Date
     let type: TypeTransaction
-    let category: Category?
+    let selectedCategory: Category?
     let categories: [Category]
 }
 
@@ -16,7 +16,7 @@ extension AddTransactionUIState {
         description: "",
         date: Date(),
         type: TypeTransaction.expense,
-        category: nil,
+        selectedCategory: nil,
         categories: []
     )
 }
@@ -35,7 +35,7 @@ extension AddTransactionUIState {
             description: description ?? self.description,
             date: date ?? self.date,
             type: type ?? self.type,
-            category: category,
+            selectedCategory: category,
             categories: categories ?? self.categories
         )
         print(newUiState)

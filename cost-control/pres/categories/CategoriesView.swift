@@ -6,14 +6,14 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        self.typeInput = viewModel.uiState.typeInput
+        self.typeInput = viewModel.uiState.type
     }
     
     var filteredCategories: [Category] {
-        if let expandedCategory = viewModel.uiState.expandedCategory {
+        if let expandedCategory = viewModel.uiState.selectedCategory {
             return [expandedCategory]
         } else {
-            return viewModel.uiState.categories.filter { $0.type == viewModel.uiState.typeInput }
+            return viewModel.uiState.categories.filter { $0.type == viewModel.uiState.type }
         }
     }
     
@@ -36,10 +36,10 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                         
                         let totalAmount = viewModel.uiState.transactions
                             .filter {
-                                if ($0.category != nil && viewModel.uiState.expandedCategory != nil) {
-                                    return $0.category == viewModel.uiState.expandedCategory
+                                if ($0.category != nil && viewModel.uiState.selectedCategory != nil) {
+                                    return $0.category == viewModel.uiState.selectedCategory
                                 } else {
-                                    return $0.type == viewModel.uiState.typeInput
+                                    return $0.type == viewModel.uiState.type
                                 }
                             }
                             .reduce(0) { $0 + $1.amount }
@@ -53,7 +53,7 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                             HStack(spacing: 0) {
                                 ForEach(filteredCategories) { category in
                                     let categoryAmount = viewModel.uiState.transactions
-                                        .filter { $0.type == viewModel.uiState.typeInput }
+                                        .filter { $0.type == viewModel.uiState.type }
                                         .filter { $0.category == category }
                                         .reduce(0) { $0 + $1.amount }
                                     let width = geometry.size.width * (categoryAmount / totalAmount)
@@ -75,7 +75,7 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                         
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack {
-                                ForEach(viewModel.uiState.categories.filter { $0.type == viewModel.uiState.typeInput }) { category in
+                                ForEach(viewModel.uiState.categories.filter { $0.type == viewModel.uiState.type }) { category in
                                     HStack {
                                         Image(systemName: category.icon)
                                             .foregroundColor(Color(hex: category.colorHex))
@@ -98,7 +98,7 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                                     .cornerRadius(30)
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 30)
-                                            .stroke(viewModel.uiState.expandedCategory == category ? Color(hex: category.colorHex) : Color.clear, lineWidth: 2)
+                                            .stroke(viewModel.uiState.selectedCategory == category ? Color(hex: category.colorHex) : Color.clear, lineWidth: 2)
                                     )
                                     .onTapGesture {
                                         withAnimation {
@@ -126,6 +126,9 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                         .imageScale(.large)
                 }
             )
+        }
+        .onChange(of: viewModel.uiState) {
+            typeInput = viewModel.uiState.type
         }
     }
 }

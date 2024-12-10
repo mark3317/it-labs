@@ -1,17 +1,17 @@
 import Foundation
 import SwiftUI
 
-struct CategoriesUIState {
-    let typeInput: TypeTransaction
-    let expandedCategory: Category?
+struct CategoriesUIState : Equatable {
+    let type: TypeTransaction
+    let selectedCategory: Category?
     let categories: [Category]
     let transactions: [Transaction]
 }
 
 extension CategoriesUIState {
     static let initial = CategoriesUIState(
-        typeInput: .expense,
-        expandedCategory: nil,
+        type: .expense,
+        selectedCategory: nil,
         categories: [],
         transactions: []
     )
@@ -25,8 +25,8 @@ extension CategoriesUIState {
         transactions: [Transaction]? = nil
     ) -> CategoriesUIState {
         let newUiState = CategoriesUIState(
-            typeInput: typeInput ?? self.typeInput,
-            expandedCategory: expandedCategory,
+            type: typeInput ?? self.type,
+            selectedCategory: expandedCategory,
             categories: categories ?? self.categories,
             transactions: transactions ?? self.transactions
         )

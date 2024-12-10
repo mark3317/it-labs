@@ -1,19 +1,32 @@
 import Foundation
 import SwiftUI
 
-struct AddCategoryUIState {
+struct AddCategoryUIState : Equatable {
     let name: String
     let color: Color
     let type: TypeTransaction
     let icon: String
+    
+    let availableColors: [Color] = [
+        .blue, .red, .green, .yellow, .orange, .pink,
+        .purple, .teal, .gray, .brown, .indigo, .cyan,
+        .mint, .black
+    ]
+    let availableIcons = [
+        "star", "dollarsign.circle", "cart", "house", "gift",
+        "gamecontroller","book", "car", "bag", "bicycle",
+        "camera", "music.note", "wrench", "briefcase", "creditcard",
+        "chart.bar", "tv", "laptopcomputer", "tshirt", "film",
+        "umbrella", "flame", "drop", "pawprint", "stethoscope"
+    ]
 }
 
 extension AddCategoryUIState {
     static let initial = AddCategoryUIState(
         name: "",
-        color: Color.white,
+        color: Color.blue,
         type: TypeTransaction.expense,
-        icon: "minus"
+        icon: "star"
     )
 }
 

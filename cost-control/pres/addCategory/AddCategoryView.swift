@@ -2,27 +2,23 @@ import SwiftUI
 
 struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
     @ObservedObject var viewModel: ViewModel
-    @State private var nameInput: String = ""
-    @State private var typeInput: TypeTransaction = .expense
-    @State private var selectedIcon: String = "star"
-    @State private var selectedColor: Color = .blue
+    @State private var nameInput: String
+    @State private var typeInput: TypeTransaction
+    @State private var selectedIcon: String
+    @State private var selectedColor: Color
     
     private enum Field: Int, CaseIterable {
         case name
     }
     @FocusState private var focusedField: Field?
     
-    private let availableIcons = [
-        "star", "dollarsign.circle", "cart", "house", "gift",
-        "gamecontroller","book", "car", "bag", "bicycle",
-        "camera", "music.note", "wrench", "briefcase", "creditcard",
-        "chart.bar", "tv", "laptopcomputer", "tshirt", "film",
-        "umbrella", "flame", "drop", "pawprint", "stethoscope"
-    ]
-    
-    private let availableColors: [Color] = [
-        .red, .blue, .green, .yellow, .orange, .pink, .purple, .teal, .gray, .brown, .indigo, .cyan, .mint, .black
-    ]
+    init(viewModel: ViewModel) {
+        self.viewModel = viewModel
+        self.nameInput = viewModel.uiState.name
+        self.typeInput = viewModel.uiState.type
+        self.selectedIcon = viewModel.uiState.icon
+        self.selectedColor = viewModel.uiState.color
+    }
     
     var body: some View {
         NavigationStack {
@@ -32,7 +28,6 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                         .focused($focusedField, equals: Field.name)
                         .onChange(of: nameInput) {
                             viewModel.editName(nameInput)
-                            nameInput = viewModel.uiState.name
                         }
                 }
                 
@@ -50,7 +45,7 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                 
                 Section(header: Text("Иконка")) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 16) {
-                        ForEach(availableIcons, id: \.self) { icon in
+                        ForEach(viewModel.uiState.availableIcons, id: \.self) { icon in
                             ZStack {
                                 Circle()
                                     .fill(selectedIcon == icon ? selectedColor : Color.gray.opacity(0.3))
@@ -61,7 +56,6 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                             }
                             .onTapGesture {
                                 viewModel.editIcon(icon)
-                                selectedIcon = viewModel.uiState.icon
                             }
                         }
                     }
@@ -69,7 +63,7 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                 
                 Section(header: Text("Цвет")) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 16) {
-                        ForEach(availableColors, id: \.self) { color in
+                        ForEach(viewModel.uiState.availableColors, id: \.self) { color in
                             Circle()
                                 .fill(color)
                                 .frame(width: 40, height: 40)
@@ -79,7 +73,6 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                                 )
                                 .onTapGesture {
                                     viewModel.editColor(color)
-                                    selectedColor = viewModel.uiState.color
                                 }
                         }
                     }
@@ -107,6 +100,12 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                     }
                 }
             }
+        }
+        .onChange(of: viewModel.uiState) {
+            nameInput = viewModel.uiState.name
+            typeInput = viewModel.uiState.type
+            selectedIcon = viewModel.uiState.icon
+            selectedColor = viewModel.uiState.color
         }
     }
 }

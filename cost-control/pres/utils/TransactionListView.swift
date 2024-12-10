@@ -55,12 +55,12 @@ struct TransactionListView: View {
 #Preview {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = "yyyy-MM-dd"
-    
+    // Пример данных
     let foodCategory = Category(name: "Еда", colorHex: Color.red.toHex(), type: .expense, icon: "fork.knife")
     let salaryCategory = Category(name: "Зарплата", colorHex: Color.green.toHex(), type: .income, icon: "dollarsign.circle")
     let entertainmentCategory = Category(name: "Развлечения", colorHex: Color.blue.toHex(), type: .expense, icon: "gamecontroller")
     let investmentCategory = Category(name: "Инвестиции", colorHex: Color.purple.toHex(), type: .income, icon: "chart.bar")
-    // Пример данных
+   
     let transactions = [
         Transaction(amount: 100.0, description: "Salary", date: dateFormatter.date(from: "2023-10-01")!, type: .income, category: salaryCategory),
         Transaction(amount: 50.0, description: "Food", date: Date(), type: .expense, category: foodCategory),

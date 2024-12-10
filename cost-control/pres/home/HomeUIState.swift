@@ -1,6 +1,6 @@
 import Foundation
 
-struct HomeUIState {
+struct HomeUIState : Equatable {
     let totalIncome: Double
     let totalExpense: Double
     let balance: Double

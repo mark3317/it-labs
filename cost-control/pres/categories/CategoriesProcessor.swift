@@ -20,7 +20,7 @@ class CategoriesProcessor: CategoriesViewModel {
         ]
         
         uiState = uiState.copy(
-            expandedCategory: self.uiState.expandedCategory,
+            expandedCategory: self.uiState.selectedCategory,
             categories: [foodCategory, salaryCategory, entertainmentCategory, investmentCategory],
             transactions: transactions
         )
@@ -34,7 +34,7 @@ class CategoriesProcessor: CategoriesViewModel {
     }
     
     func editExpandedCategory(_ category: Category) {
-        let d = category == uiState.expandedCategory ? nil : category
+        let d = category == uiState.selectedCategory ? nil : category
         uiState = uiState.copy(
             expandedCategory: d
         )
