@@ -1,5 +1,4 @@
 import SwiftUI
-import Foundation
 
 class CategoriesProcessor: CategoriesViewModel {
     @ObservedObject private var ops: CostControlOps
@@ -28,7 +27,7 @@ class CategoriesProcessor: CategoriesViewModel {
         ]
         self.ops = ops
         addCategoryViewModel = AddCategoryProcessor(ops: ops)
-        uiState = CategoriesUIState(
+        uiState = .init(
             currency: ops.settings.currency,
             type: .expense,
             selectedCategory: nil,

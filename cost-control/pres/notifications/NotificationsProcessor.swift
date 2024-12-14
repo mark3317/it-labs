@@ -1,5 +1,4 @@
 import SwiftUI
-import Foundation
 
 class NotificationsProcessor: NotificationsViewModel {
     @ObservedObject private var ops: CostControlOps
@@ -8,11 +7,12 @@ class NotificationsProcessor: NotificationsViewModel {
     init(ops: CostControlOps) {
         self.ops = ops
         uiState = .init(
+            currency: ops.settings.currency,
             isReminderEnabled: false,
             isLimitExceededNotificationEnabled: false,
             isRandomReportEnabled: false,
             limitAmount: 100.0,
-            selectedPeriod: .day
+            selectedPeriod: NotificationPeriod.day
         )
     }
     
@@ -40,7 +40,7 @@ class NotificationsProcessor: NotificationsViewModel {
         )
     }
     
-    func editSelectedPeriod(_ period: Period) {
+    func editSelectedPeriod(_ period: NotificationPeriod) {
         uiState = uiState.copy(
             selectedPeriod: period
         )

@@ -38,7 +38,7 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
                         .actionSheet(isPresented: $showCurrencyPicker) {
                             ActionSheet(
                                 title: Text("Выберите валюту"),
-                                buttons: viewModel.uiState.currencySymbols.map { symbol in
+                                buttons: AppSettings.currencySymbols.map { symbol in
                                         .default(Text(symbol)) {
                                             viewModel.editCurrencySymbol(symbol)
                                         }

@@ -1,28 +1,22 @@
 import Foundation
 
 struct NotificationsUIState : Equatable {
+    let currency: String
     let isReminderEnabled: Bool
     let isLimitExceededNotificationEnabled: Bool
     let isRandomReportEnabled: Bool
     let limitAmount: Double
-    let selectedPeriod: Period
-}
-
-enum Period: String, CaseIterable, Identifiable {
-    case day = "День"
-    case week = "Неделя"
-    case month = "Месяц"
-    
-    var id: String { self.rawValue }
+    let selectedPeriod: NotificationPeriod
 }
 
 extension NotificationsUIState {
     static let initial = NotificationsUIState(
+        currency: "₽",
         isReminderEnabled: false,
         isLimitExceededNotificationEnabled: false,
         isRandomReportEnabled: false,
         limitAmount: 100.0,
-        selectedPeriod: .day
+        selectedPeriod: NotificationPeriod.day
     )
 }
 
@@ -32,9 +26,10 @@ extension NotificationsUIState {
         isLimitExceededNotificationEnabled: Bool? = nil,
         isRandomReportEnabled: Bool? = nil,
         limitAmount: Double? = nil,
-        selectedPeriod: Period? = nil
+        selectedPeriod: NotificationPeriod? = nil
     ) -> NotificationsUIState {
         let newUiState = NotificationsUIState(
+            currency: self.currency,
             isReminderEnabled: isReminderEnabled ?? self.isReminderEnabled,
             isLimitExceededNotificationEnabled: isLimitExceededNotificationEnabled ?? self.isLimitExceededNotificationEnabled,
             isRandomReportEnabled: isRandomReportEnabled ?? self.isRandomReportEnabled,

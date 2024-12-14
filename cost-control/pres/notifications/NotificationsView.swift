@@ -7,7 +7,7 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
     @State private var isLimitExceededNotificationEnabled: Bool
     @State private var isRandomReportEnabled: Bool
     @State private var limitAmount: Double
-    @State private var selectedPeriod: Period
+    @State private var selectedPeriod: NotificationPeriod
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
@@ -43,7 +43,9 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
                         Text("Превышение лимита")
                     }
                     .onChange(of: isLimitExceededNotificationEnabled) {
-                        viewModel.editLimitExceededNotificationEnabled(isLimitExceededNotificationEnabled)
+                        withAnimation {
+                            viewModel.editLimitExceededNotificationEnabled(isLimitExceededNotificationEnabled)
+                        }
                     }
                     
                     if viewModel.uiState.isLimitExceededNotificationEnabled {
@@ -51,7 +53,7 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
                             HStack {
                                 Text("Сумма лимита:")
                                 Spacer()
-                                Text("\(viewModel.uiState.limitAmount, specifier: "%.2f") ₽")
+                                Text("\(viewModel.uiState.limitAmount, specifier: "%.2f") \(viewModel.uiState.currency)")
                             }
                             Slider(value: $limitAmount, in: 0...10000, step: 100)
                                 .accentColor(.blue)
@@ -62,7 +64,7 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
                                 Text("Период:")
                                 Spacer()
                                 Picker("Выберите период", selection: $selectedPeriod) {
-                                    ForEach(Period.allCases) { period in
+                                    ForEach(NotificationPeriod.allCases) { period in
                                         Text(period.rawValue).tag(period)
                                     }
                                 }

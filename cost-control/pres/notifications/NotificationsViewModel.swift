@@ -6,5 +6,5 @@ protocol NotificationsViewModel : ObservableObject {
     func editLimitExceededNotificationEnabled(_ enabled: Bool)
     func editRandomReportEnabled(_ enabled: Bool)
     func editLimitAmount(_ amount: Double)
-    func editSelectedPeriod(_ period: Period)
+    func editSelectedPeriod(_ period: NotificationPeriod)
 }

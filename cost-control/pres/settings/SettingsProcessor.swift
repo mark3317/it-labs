@@ -1,5 +1,4 @@
 import SwiftUI
-import Foundation
 
 class SettingsProcessor: SettingsViewModel {
     @ObservedObject private var ops: CostControlOps

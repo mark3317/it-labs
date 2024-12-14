@@ -4,7 +4,6 @@ struct SettingsUIState : Equatable {
     let isBiometricsEnabled: Bool
     let isDarkModeEnabled: Bool
     let selectedCurrencySymbol: String
-    let currencySymbols: [String] = ["$", "€", "₽", "¥"]
 }
 
 extension SettingsUIState {

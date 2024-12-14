@@ -2,7 +2,6 @@ import Combine
 
 final class CostControlOps : ObservableObject {
     private var settingsRepo: any ISettingsRepo
-    
     @Published private(set) var settings: AppSettings
     
     init(settingsRepo: any ISettingsRepo) {
