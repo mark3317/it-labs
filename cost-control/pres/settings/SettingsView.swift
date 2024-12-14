@@ -1,8 +1,8 @@
 import SwiftUI
 
-struct SettingsView<ViewModel>: View where ViewModel: SettingsViewModel {
+struct SettingsView<ViewModel: SettingsViewModel>: View {
     @ObservedObject var viewModel: ViewModel
-    @State private var isNotificationsEnabled: Bool
+    
     @State private var isBiometricsEnabled: Bool
     @State private var isDarkModeEnabled: Bool
     @State private var selectedCurrencySymbol: String
@@ -14,7 +14,6 @@ struct SettingsView<ViewModel>: View where ViewModel: SettingsViewModel {
     
     init(viewModel: ViewModel) {
         self.viewModel = viewModel
-        self.isNotificationsEnabled = viewModel.uiState.isNotificationsEnabled
         self.isBiometricsEnabled = viewModel.uiState.isBiometricsEnabled
         self.isDarkModeEnabled = viewModel.uiState.isDarkModeEnabled
         self.selectedCurrencySymbol = viewModel.uiState.selectedCurrencySymbol
@@ -31,7 +30,7 @@ struct SettingsView<ViewModel>: View where ViewModel: SettingsViewModel {
                             HStack {
                                 Text("Валюта")
                                 Spacer()
-                                Text(selectedCurrencySymbol)
+                                Text(String(selectedCurrencySymbol))
                                     .foregroundColor(.gray)
                             }
                         }
@@ -58,7 +57,9 @@ struct SettingsView<ViewModel>: View where ViewModel: SettingsViewModel {
                                 title: Text("Подтвердите сброс"),
                                 message: Text("Вы уверены, что хотите сбросить все данные приложения? Это действие нельзя отменить."),
                                 primaryButton: .destructive(Text("Сбросить")) {
-                                    viewModel.resetSettings()
+                                    withAnimation {
+                                        viewModel.resetSettings()
+                                    }
                                 },
                                 secondaryButton: .cancel(Text("Отмена"))
                             )
@@ -66,7 +67,7 @@ struct SettingsView<ViewModel>: View where ViewModel: SettingsViewModel {
                     }
                     
                     Section(header: Text("Системные настройки")) {
-                        NavigationLink(destination: NotificationsView(viewModel: NotificationsProcessor())) {
+                        NavigationLink(destination: NotificationsView(viewModel: viewModel.notificationsViewModel)) {
                             HStack {
                                 Image(systemName: "bell.fill")
                                     .foregroundColor(.blue)
@@ -141,7 +142,6 @@ struct SettingsView<ViewModel>: View where ViewModel: SettingsViewModel {
         .colorScheme(viewModel.uiState.isDarkModeEnabled ? .dark : .light)
         .onChange(of: viewModel.uiState) {
             withAnimation {
-                isNotificationsEnabled = viewModel.uiState.isNotificationsEnabled
                 isBiometricsEnabled = viewModel.uiState.isBiometricsEnabled
                 isDarkModeEnabled = viewModel.uiState.isDarkModeEnabled
                 selectedCurrencySymbol = viewModel.uiState.selectedCurrencySymbol
@@ -151,5 +151,7 @@ struct SettingsView<ViewModel>: View where ViewModel: SettingsViewModel {
 }
 
 #Preview {
-    SettingsView(viewModel: SettingsProcessor())
+    SettingsView(
+        viewModel: SettingsProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+    )
 }

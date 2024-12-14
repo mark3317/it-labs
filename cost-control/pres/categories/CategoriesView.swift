@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
+struct CategoriesView<ViewModel: CategoriesViewModel>: View {
     @ObservedObject var viewModel: ViewModel
+    
     @State private var typeInput: TypeTransaction
     
     init(viewModel: ViewModel) {
@@ -44,7 +45,7 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                             }
                             .reduce(0) { $0 + $1.amount }
                         
-                        Text("Сумма: \(totalAmount, specifier: "%.2f") ₽")
+                        Text("Сумма: \(totalAmount, specifier: "%.2f") \(viewModel.uiState.currency)")
                             .frame(maxWidth: .infinity, alignment: .leading)
                             .font(.title)
                             .padding()
@@ -88,7 +89,7 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                                             let categoryAmount = viewModel.uiState.transactions
                                                 .filter { $0.type == typeInput && $0.category == category }
                                                 .reduce(0) { $0 + $1.amount }
-                                            Text("\(categoryAmount, specifier: "%.2f") ₽")
+                                            Text("\(categoryAmount, specifier: "%.2f") \(viewModel.uiState.currency)")
                                                 .font(.caption2)
                                         }
                                     }
@@ -110,9 +111,12 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
                             .padding()
                         }
                         
-                        TransactionListView(title: "Операции по категориям", transactions: viewModel.uiState.transactions.filter { transaction in
-                            filteredCategories.contains { $0 == transaction.category }
-                        })
+                        TransactionListView(
+                            title: "Операции по категориям",
+                            transactions: viewModel.uiState.transactions.filter { transaction in
+                                filteredCategories.contains { $0 == transaction.category }
+                            },
+                            currency: viewModel.uiState.currency)
                     }
                 }
             }
@@ -120,7 +124,7 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: NavigationLink(
-                    destination: AddCategoryView(viewModel: AddCategoryProcessor())
+                    destination: AddCategoryView(viewModel: viewModel.addCategoryViewModel)
                 ) {
                     Image(systemName: "plus")
                         .imageScale(.large)
@@ -134,5 +138,7 @@ struct CategoriesView<ViewModel>: View where ViewModel: CategoriesViewModel {
 }
 
 #Preview {
-    CategoriesView(viewModel: CategoriesProcessor())
+    CategoriesView(
+        viewModel: CategoriesProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+    )
 }

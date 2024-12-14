@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct NotificationsView<ViewModel>: View where ViewModel: NotificationsViewModel {
+struct NotificationsView<ViewModel: NotificationsViewModel>: View {
     @ObservedObject var viewModel: ViewModel
+    
     @State private var isReminderEnabled: Bool
     @State private var isLimitExceededNotificationEnabled: Bool
     @State private var isRandomReportEnabled: Bool
@@ -101,5 +102,7 @@ struct NotificationsView<ViewModel>: View where ViewModel: NotificationsViewMode
 }
 
 #Preview {
-    NotificationsView(viewModel: NotificationsProcessor())
+    NotificationsView(
+        viewModel: NotificationsProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+    )
 }

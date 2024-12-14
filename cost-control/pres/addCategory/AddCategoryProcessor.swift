@@ -2,7 +2,18 @@ import SwiftUI
 import Foundation
 
 class AddCategoryProcessor: AddCategoryViewModel {
-    @Published var uiState = AddCategoryUIState.initial
+    @ObservedObject private var ops: CostControlOps
+    @Published private(set) var uiState: AddCategoryUIState
+    
+    init(ops: CostControlOps) {
+        self.ops = ops
+        uiState = .init(
+            name: "",
+            color: Category.colors[0],
+            type: TypeTransaction.expense,
+            icon: Category.icons[0]
+        )
+    }
     
     func editName(_ name: String) {
         uiState = uiState.copy(name: name)

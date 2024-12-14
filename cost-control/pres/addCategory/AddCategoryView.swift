@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
+struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
     @ObservedObject var viewModel: ViewModel
+    
     @State private var nameInput: String
     @State private var typeInput: TypeTransaction
     @State private var selectedIcon: String
@@ -45,7 +46,7 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                 
                 Section(header: Text("Иконка")) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 16) {
-                        ForEach(viewModel.uiState.availableIcons, id: \.self) { icon in
+                        ForEach(Category.icons, id: \.self) { icon in
                             ZStack {
                                 Circle()
                                     .fill(selectedIcon == icon ? selectedColor : Color.gray.opacity(0.3))
@@ -63,7 +64,7 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
                 
                 Section(header: Text("Цвет")) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 16) {
-                        ForEach(viewModel.uiState.availableColors, id: \.self) { color in
+                        ForEach(Category.colors, id: \.self) { color in
                             Circle()
                                 .fill(color)
                                 .frame(width: 40, height: 40)
@@ -111,5 +112,7 @@ struct AddCategoryView<ViewModel>: View where ViewModel: AddCategoryViewModel {
 }
 
 #Preview {
-    AddCategoryView(viewModel: AddCategoryProcessor())
+    AddCategoryView(
+        viewModel: AddCategoryProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+    )
 }

@@ -2,7 +2,19 @@ import SwiftUI
 import Foundation
 
 class NotificationsProcessor: NotificationsViewModel {
-    @Published var uiState = NotificationsUIState.initial
+    @ObservedObject private var ops: CostControlOps
+    @Published private(set) var uiState: NotificationsUIState
+    
+    init(ops: CostControlOps) {
+        self.ops = ops
+        uiState = .init(
+            isReminderEnabled: false,
+            isLimitExceededNotificationEnabled: false,
+            isRandomReportEnabled: false,
+            limitAmount: 100.0,
+            selectedPeriod: .day
+        )
+    }
     
     func editReminderEnabled(_ enabled: Bool) {
         uiState = uiState.copy(

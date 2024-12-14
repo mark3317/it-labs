@@ -1,17 +1,24 @@
 import SwiftUI
 
 class AddTransactionProcessor: AddTransactionViewModel {
-    @Published var uiState = AddTransactionUIState.initial
+    @ObservedObject private var ops: CostControlOps
+    @Published private(set) var uiState: AddTransactionUIState
     
-    init() {
+    init(ops: CostControlOps) {
         // Пример данных
         let foodCategory = Category(name: "Еда", colorHex: Color.red.toHex(), type: .expense, icon: "fork.knife")
         let salaryCategory = Category(name: "Зарплата", colorHex: Color.green.toHex(), type: .income, icon: "dollarsign.circle")
         let entertainmentCategory = Category(name: "Развлечения", colorHex: Color.blue.toHex(), type: .expense, icon: "gamecontroller")
         let investmentCategory = Category(name: "Инвестиции", colorHex: Color.purple.toHex(), type: .income, icon: "chart.bar")
         
-        uiState = uiState.copy(
-            category: uiState.selectedCategory,
+        self.ops = ops
+        uiState = .init(
+            currency: ops.settings.currency,
+            amount: 0,
+            description: "",
+            date: Date(),
+            type: TypeTransaction.expense,
+            selectedCategory: nil,
             categories: [foodCategory, salaryCategory, entertainmentCategory, investmentCategory]
         )
     }

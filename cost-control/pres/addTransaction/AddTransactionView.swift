@@ -1,7 +1,8 @@
 import SwiftUI
 
-struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewModel {
+struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
     @ObservedObject var viewModel: ViewModel
+    
     @State private var amountInput: Double
     @State private var descriptionInput: String
     @State private var typeInput: TypeTransaction
@@ -33,7 +34,7 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
                         .overlay(
                             HStack {
                                 Spacer()
-                                Text("₽")
+                                Text(viewModel.uiState.currency)
                                     .foregroundColor(.gray)
                             }
                         )
@@ -128,5 +129,7 @@ struct AddTransactionView<ViewModel>: View where ViewModel: AddTransactionViewMo
 }
 
 #Preview {
-    AddTransactionView(viewModel: AddTransactionProcessor())
+    AddTransactionView(
+        viewModel: AddTransactionProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+    )
 }

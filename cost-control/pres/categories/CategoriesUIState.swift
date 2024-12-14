@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 struct CategoriesUIState : Equatable {
+    let currency: String
     let type: TypeTransaction
     let selectedCategory: Category?
     let categories: [Category]
@@ -10,6 +11,7 @@ struct CategoriesUIState : Equatable {
 
 extension CategoriesUIState {
     static let initial = CategoriesUIState(
+        currency: "₽",
         type: .expense,
         selectedCategory: nil,
         categories: [],
@@ -25,6 +27,7 @@ extension CategoriesUIState {
         transactions: [Transaction]? = nil
     ) -> CategoriesUIState {
         let newUiState = CategoriesUIState(
+            currency: self.currency,
             type: typeInput ?? self.type,
             selectedCategory: expandedCategory,
             categories: categories ?? self.categories,

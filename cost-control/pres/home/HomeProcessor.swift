@@ -1,10 +1,20 @@
-import Foundation
 import SwiftUI
 
 class HomeProcessor: HomeViewModel {
-    @Published var uiState = HomeUIState.initial
+    @ObservedObject private var ops: CostControlOps
+    @Published private(set) var uiState: HomeUIState
+    private(set) var addTransactionViewModel: AddTransactionProcessor
     
-    init() {
+    init(ops: CostControlOps) {
+        self.ops = ops
+        addTransactionViewModel = AddTransactionProcessor(ops: ops)
+        uiState = .init(
+            currency: ops.settings.currency,
+            totalIncome: 0,
+            totalExpense: 0,
+            balance: 0,
+            transactions: []
+        )
         loadData()
     }
     

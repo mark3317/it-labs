@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct HomeView<ViewModel>: View where ViewModel: HomeViewModel {
+struct HomeView<ViewModel: HomeViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
     var body: some View {
@@ -12,7 +12,7 @@ struct HomeView<ViewModel>: View where ViewModel: HomeViewModel {
                         VStack(alignment: .leading) {
                             Text("Расходы")
                                 .font(.headline)
-                            Text("\(viewModel.uiState.totalExpense, specifier: "%.2f") ₽")
+                            Text("\(viewModel.uiState.totalExpense, specifier: "%.2f") \(viewModel.uiState.currency)")
                                 .font(.title)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
@@ -27,7 +27,7 @@ struct HomeView<ViewModel>: View where ViewModel: HomeViewModel {
                         VStack(alignment: .leading) {
                             Text("Доходы")
                                 .font(.headline)
-                            Text("\(viewModel.uiState.totalIncome, specifier: "%.2f") ₽")
+                            Text("\(viewModel.uiState.totalIncome, specifier: "%.2f") \(viewModel.uiState.currency)")
                                 .font(.title)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.5)
@@ -43,7 +43,7 @@ struct HomeView<ViewModel>: View where ViewModel: HomeViewModel {
                     VStack {
                         Text("Остаток")
                             .font(.headline)
-                        Text("\(viewModel.uiState.balance, specifier: "%.2f") ₽")
+                        Text("\(viewModel.uiState.balance, specifier: "%.2f") \(viewModel.uiState.currency)")
                             .font(.title)
                             .lineLimit(1)
                             .minimumScaleFactor(0.5)
@@ -54,14 +54,18 @@ struct HomeView<ViewModel>: View where ViewModel: HomeViewModel {
                     .cornerRadius(50)
                     .padding()
                     
-                    TransactionListView(title: "Последние операции", transactions: viewModel.uiState.transactions)
+                    TransactionListView(
+                        title: "Последние операции",
+                        transactions: viewModel.uiState.transactions,
+                        currency: viewModel.uiState.currency
+                    )
                 }
             }
             .navigationBarTitle("Главная")
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: NavigationLink(
-                    destination: AddTransactionView(viewModel: AddTransactionProcessor())
+                    destination: AddTransactionView(viewModel: viewModel.addTransactionViewModel)
                 ) {
                     Image(systemName: "plus")
                         .imageScale(.large)
@@ -72,5 +76,7 @@ struct HomeView<ViewModel>: View where ViewModel: HomeViewModel {
 }
 
 #Preview {
-    HomeView(viewModel: HomeProcessor())
+    HomeView(
+        viewModel: HomeProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+    )
 }

@@ -3,6 +3,7 @@ import SwiftUI
 struct TransactionListView: View {
     let title: String
     let transactions: [Transaction]
+    let currency: String
     
     var body: some View {
         let groupedTransactions = Dictionary(grouping: transactions) { transaction in
@@ -38,7 +39,7 @@ struct TransactionListView: View {
                                 .font(.subheadline)
                             }
                             Spacer()
-                            Text("\(transaction.amount, specifier: "%.2f") ₽")
+                            Text("\(transaction.amount, specifier: "%.2f") \(currency)")
                                 .font(.headline)
                                 .foregroundColor(
                                     transaction.type == .income ? .green : .red)
@@ -69,5 +70,5 @@ struct TransactionListView: View {
         Transaction(amount: 150.0, description: "Investment", date: dateFormatter.date(from: "2023-12-6")!, type: .income, category: investmentCategory)
     ]
     
-    return TransactionListView(title: "Последние операции", transactions: transactions)
+    return TransactionListView(title: "Последние операции", transactions: transactions, currency: "₽")
 }

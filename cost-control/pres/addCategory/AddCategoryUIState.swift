@@ -6,27 +6,14 @@ struct AddCategoryUIState : Equatable {
     let color: Color
     let type: TypeTransaction
     let icon: String
-    
-    let availableColors: [Color] = [
-        .blue, .red, .green, .yellow, .orange, .pink,
-        .purple, .teal, .gray, .brown, .indigo, .cyan,
-        .mint, .black
-    ]
-    let availableIcons = [
-        "star", "dollarsign.circle", "cart", "house", "gift",
-        "gamecontroller","book", "car", "bag", "bicycle",
-        "camera", "music.note", "wrench", "briefcase", "creditcard",
-        "chart.bar", "tv", "laptopcomputer", "tshirt", "film",
-        "umbrella", "flame", "drop", "pawprint", "stethoscope"
-    ]
 }
 
 extension AddCategoryUIState {
     static let initial = AddCategoryUIState(
         name: "",
-        color: Color.blue,
+        color: Category.colors[0],
         type: TypeTransaction.expense,
-        icon: "star"
+        icon: Category.icons[0]
     )
 }
 

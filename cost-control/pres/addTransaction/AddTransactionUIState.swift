@@ -2,6 +2,7 @@ import Foundation
 import SwiftUI
 
 struct AddTransactionUIState: Equatable {
+    let currency: String
     let amount: Double
     let description: String
     let date: Date
@@ -12,6 +13,7 @@ struct AddTransactionUIState: Equatable {
 
 extension AddTransactionUIState {
     static let initial = AddTransactionUIState(
+        currency: "₽",
         amount: 0,
         description: "",
         date: Date(),
@@ -31,6 +33,7 @@ extension AddTransactionUIState {
         categories: [Category]? = nil
     ) -> AddTransactionUIState {
         let newUiState = AddTransactionUIState(
+            currency: self.currency,
             amount: amount ?? self.amount,
             description: description ?? self.description,
             date: date ?? self.date,
