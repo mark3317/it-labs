@@ -3,39 +3,26 @@ import SwiftUI
 struct SettingsView<ViewModel: SettingsViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
-    @State private var isBiometricsEnabled: Bool
-    @State private var isDarkModeEnabled: Bool
-    @State private var selectedCurrencySymbol: String
-    
-    @State private var showCurrencyPicker: Bool = false
-    @State private var showResetConfirmation: Bool = false
-    @State private var showAppDescriptionAlert: Bool = false
-    @State private var showPrivacyPolicyAlert: Bool = false
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-        self.isBiometricsEnabled = viewModel.uiState.isBiometricsEnabled
-        self.isDarkModeEnabled = viewModel.uiState.isDarkModeEnabled
-        self.selectedCurrencySymbol = viewModel.uiState.selectedCurrencySymbol
-    }
-    
     var body: some View {
         NavigationStack {
             VStack {
                 Form {
                     Section(header: Text("Общие")) {
                         Button(action: {
-                            showCurrencyPicker.toggle()
+                            viewModel.editCurrencyPickerShowed(true)
                         }) {
                             HStack {
                                 Text("Валюта")
                                 Spacer()
-                                Text(String(selectedCurrencySymbol))
+                                Text(String(viewModel.uiState.currency))
                                     .foregroundColor(.gray)
                             }
                         }
                         .foregroundColor(.primary)
-                        .actionSheet(isPresented: $showCurrencyPicker) {
+                        .actionSheet(isPresented: Binding(
+                            get: { viewModel.uiState.isCurrencyPickerShowed },
+                            set: { viewModel.editCurrencyPickerShowed($0) }
+                        )) {
                             ActionSheet(
                                 title: Text("Выберите валюту"),
                                 buttons: AppSettings.currencySymbols.map { symbol in
@@ -47,12 +34,15 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
                         }
                         
                         Button(action: {
-                            showResetConfirmation = true
+                            viewModel.editResetConfirmationShowed(true)
                         }) {
                             Text("Сбросить данные")
                                 .foregroundColor(.red)
                         }
-                        .alert(isPresented: $showResetConfirmation) {
+                        .alert(isPresented: Binding(
+                            get: { viewModel.uiState.isResetConfirmationShowed },
+                            set: { viewModel.editResetConfirmationShowed($0) }
+                        )) {
                             Alert(
                                 title: Text("Подтвердите сброс"),
                                 message: Text("Вы уверены, что хотите сбросить все данные приложения? Это действие нельзя отменить."),
@@ -74,33 +64,33 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
                                 Text("Уведомления")
                             }
                         }
-                        Toggle(isOn: $isBiometricsEnabled) {
+                        Toggle(isOn: Binding(
+                            get: { viewModel.uiState.isBiometricsEnabled },
+                            set: { viewModel.editBiometricsEnabled($0) }
+                        )) {
                             HStack {
                                 Image(systemName: "faceid")
                                     .foregroundColor(.green)
                                 Text("Face ID / Touch ID")
                             }
                         }
-                        .onChange(of: isBiometricsEnabled) {
-                            viewModel.editBiometricsEnabled(isBiometricsEnabled)
-                        }
-                        Toggle(isOn: $isDarkModeEnabled) {
+                        Toggle(isOn: Binding(
+                            get: { viewModel.uiState.isDarkModeEnabled },
+                            set: { newValue in withAnimation {
+                                viewModel.editDarkModeEnabled(newValue)
+                            }}
+                        )) {
                             HStack {
                                 Image(systemName: "moon.fill")
                                     .foregroundColor(.yellow)
                                 Text("Темная тема")
                             }
                         }
-                        .onChange(of: isDarkModeEnabled) {
-                            withAnimation {
-                                viewModel.editDarkModeEnabled(isDarkModeEnabled)
-                            }
-                        }
                     }
                     
                     Section(header: Text("Конфиденциальность")) {
                         Button(action: {
-                            showAppDescriptionAlert = true
+                            viewModel.editAppDescriptionAlertShowed(true)
                         }) {
                             HStack {
                                 Image(systemName: "info.circle.fill")
@@ -109,7 +99,10 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
                             }
                         }
                         .foregroundColor(.primary)
-                        .alert(isPresented: $showAppDescriptionAlert) {
+                        .alert(isPresented: Binding(
+                            get: { viewModel.uiState.isAppDescriptionAlertShowed },
+                            set: { viewModel.editAppDescriptionAlertShowed($0) }
+                        )) {
                             Alert(
                                 title: Text("О приложении"),
                                 message: Text("Это приложение позволяет отслеживать ваши доходы и расходы, а также управлять бюджетом. Вы можете добавлять операции, создавать категории и получать уведомления."),
@@ -118,7 +111,7 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
                         }
                         
                         Button(action: {
-                            showPrivacyPolicyAlert = true
+                            viewModel.editPrivacyPolicyAlertShowed(true)
                         }) {
                             HStack {
                                 Image(systemName: "lock.shield.fill")
@@ -127,7 +120,10 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
                             }
                         }
                         .foregroundColor(.primary)
-                        .alert(isPresented: $showPrivacyPolicyAlert) {
+                        .alert(isPresented: Binding(
+                            get: { viewModel.uiState.isPrivacyPolicyAlertShowed },
+                            set: { viewModel.editPrivacyPolicyAlertShowed($0) }
+                        )) {
                             Alert(
                                 title: Text("Политика конфиденциальности"),
                                 message: Text("Мы ценим вашу конфиденциальность и не передаем ваши данные третьим лицам. Все данные хранятся локально на вашем устройстве."),
@@ -140,18 +136,14 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
             .navigationBarTitle("Настройки", displayMode: .inline)
         }
         .colorScheme(viewModel.uiState.isDarkModeEnabled ? .dark : .light)
-        .onChange(of: viewModel.uiState) {
-            withAnimation {
-                isBiometricsEnabled = viewModel.uiState.isBiometricsEnabled
-                isDarkModeEnabled = viewModel.uiState.isDarkModeEnabled
-                selectedCurrencySymbol = viewModel.uiState.selectedCurrencySymbol
-            }
-        }
     }
 }
 
 #Preview {
     SettingsView(
-        viewModel: SettingsProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+        viewModel: SettingsProcessor(ops: CostControlOps(
+            settingsRepo: SettingsRepo(),
+            storageRepo: StorageRepo()
+        ))
     )
 }

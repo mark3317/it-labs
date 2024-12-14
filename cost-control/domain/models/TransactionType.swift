@@ -1,4 +1,4 @@
-enum TypeTransaction: String, CaseIterable, Identifiable {
+enum TransactionType: String, CaseIterable, Identifiable {
     case expense = "Расходы"
     case income = "Доходы"
     

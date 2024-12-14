@@ -3,21 +3,6 @@ import SwiftUI
 struct NotificationsView<ViewModel: NotificationsViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
-    @State private var isReminderEnabled: Bool
-    @State private var isLimitExceededNotificationEnabled: Bool
-    @State private var isRandomReportEnabled: Bool
-    @State private var limitAmount: Double
-    @State private var selectedPeriod: NotificationPeriod
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-        self.isReminderEnabled = viewModel.uiState.isReminderEnabled
-        self.isLimitExceededNotificationEnabled = viewModel.uiState.isLimitExceededNotificationEnabled
-        self.isRandomReportEnabled = viewModel.uiState.isRandomReportEnabled
-        self.limitAmount = viewModel.uiState.limitAmount
-        self.selectedPeriod = viewModel.uiState.selectedPeriod
-    }
-    
     var body: some View {
         NavigationStack {
             Form {
@@ -26,11 +11,11 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
                     header: Text("Напоминания"),
                     footer: Text("Если в течение дня не было добавлений новых операций, в 8 вечера будет отправлено уведомление")
                 ) {
-                    Toggle(isOn: $isReminderEnabled) {
+                    Toggle(isOn: Binding(
+                        get: { viewModel.uiState.isReminderEnabled },
+                        set: { viewModel.editReminderEnabled($0) }
+                    )) {
                         Text("Учет операций")
-                    }
-                    .onChange(of: isReminderEnabled) {
-                        viewModel.editReminderEnabled(isReminderEnabled)
                     }
                 }
                 
@@ -39,13 +24,13 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
                     header: Text("Предупреждения"),
                     footer: Text("Уведомления о превышении лимита по сумме за указанный период")
                 ) {
-                    Toggle(isOn: $isLimitExceededNotificationEnabled) {
+                    Toggle(isOn: Binding(
+                        get: { viewModel.uiState.isLimitExceededNotificationEnabled },
+                        set: { newValue in withAnimation {
+                            viewModel.editLimitExceededNotificationEnabled(newValue)
+                        }}
+                    )) {
                         Text("Превышение лимита")
-                    }
-                    .onChange(of: isLimitExceededNotificationEnabled) {
-                        withAnimation {
-                            viewModel.editLimitExceededNotificationEnabled(isLimitExceededNotificationEnabled)
-                        }
                     }
                     
                     if viewModel.uiState.isLimitExceededNotificationEnabled {
@@ -55,23 +40,23 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
                                 Spacer()
                                 Text("\(viewModel.uiState.limitAmount, specifier: "%.2f") \(viewModel.uiState.currency)")
                             }
-                            Slider(value: $limitAmount, in: 0...10000, step: 100)
-                                .accentColor(.blue)
-                                .onChange(of: limitAmount) {
-                                    viewModel.editLimitAmount(limitAmount)
-                                }
+                            Slider(value: Binding(
+                                get: { viewModel.uiState.limitAmount },
+                                set: { viewModel.editLimitAmount($0) }
+                            ), in: 0...10000, step: 100)
+                            .accentColor(.blue)
                             HStack {
                                 Text("Период:")
                                 Spacer()
-                                Picker("Выберите период", selection: $selectedPeriod) {
+                                Picker("Выберите период", selection: Binding(
+                                    get: { viewModel.uiState.selectedPeriod },
+                                    set: { viewModel.editSelectedPeriod($0) }
+                                )) {
                                     ForEach(NotificationPeriod.allCases) { period in
                                         Text(period.rawValue).tag(period)
                                     }
                                 }
                                 .pickerStyle(SegmentedPickerStyle())
-                                .onChange(of: selectedPeriod) {
-                                    viewModel.editSelectedPeriod(selectedPeriod)
-                                }
                             }
                         }
                     }
@@ -82,29 +67,25 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
                     header: Text("Отчеты"),
                     footer: Text("В конце каждой недели будет отправлен случайный короткий отчет по вашим операциям")
                 ) {
-                    Toggle(isOn: $isRandomReportEnabled) {
+                    Toggle(isOn: Binding(
+                        get: { viewModel.uiState.isRandomReportEnabled },
+                        set: { viewModel.editRandomReportEnabled($0) }
+                    )) {
                         Text("Случайные отчеты")
-                    }
-                    .onChange(of: isRandomReportEnabled) {
-                        viewModel.editRandomReportEnabled(isRandomReportEnabled)
                     }
                 }
             }
             .navigationBarTitle("Уведомления", displayMode: .inline)
             .toolbar(.hidden, for: .tabBar)
         }
-        .onChange(of: viewModel.uiState) {
-            isReminderEnabled = viewModel.uiState.isReminderEnabled
-            isLimitExceededNotificationEnabled = viewModel.uiState.isLimitExceededNotificationEnabled
-            isRandomReportEnabled = viewModel.uiState.isRandomReportEnabled
-            limitAmount = viewModel.uiState.limitAmount
-            selectedPeriod = viewModel.uiState.selectedPeriod
-        }
     }
 }
 
 #Preview {
     NotificationsView(
-        viewModel: NotificationsProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+        viewModel: NotificationsProcessor(ops: CostControlOps(
+            settingsRepo: SettingsRepo(),
+            storageRepo: StorageRepo()
+        ))
     )
 }

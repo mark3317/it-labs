@@ -2,7 +2,10 @@ import SwiftUI
 
 @main
 struct CostControlApp: App {
-    @StateObject var costControlOps = CostControlOps(settingsRepo: SettingsRepo())
+    @StateObject var costControlOps = CostControlOps(
+        settingsRepo: SettingsRepo(),
+        storageRepo: StorageRepo()
+    )
     
     var body: some Scene {
         WindowGroup {

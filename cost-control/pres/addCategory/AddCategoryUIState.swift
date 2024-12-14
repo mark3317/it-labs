@@ -4,24 +4,15 @@ import SwiftUI
 struct AddCategoryUIState : Equatable {
     let name: String
     let color: Color
-    let type: TypeTransaction
+    let type: TransactionType
     let icon: String
-}
-
-extension AddCategoryUIState {
-    static let initial = AddCategoryUIState(
-        name: "",
-        color: Category.colors[0],
-        type: TypeTransaction.expense,
-        icon: Category.icons[0]
-    )
 }
 
 extension AddCategoryUIState {
     func copy(
         name: String? = nil,
         color: Color? = nil,
-        type: TypeTransaction? = nil,
+        type: TransactionType? = nil,
         icon: String? = nil
     ) -> AddCategoryUIState {
         let newUiState = AddCategoryUIState(

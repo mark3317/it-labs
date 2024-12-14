@@ -27,6 +27,9 @@ struct ContentView<ViewModel: ContentViewModel>: View {
 
 #Preview {
     ContentView(
-        viewModel: ContentProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+        viewModel: ContentProcessor(ops: CostControlOps(
+            settingsRepo: SettingsRepo(),
+            storageRepo: StorageRepo()
+        ))
     )
 }

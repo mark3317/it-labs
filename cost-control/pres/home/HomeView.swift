@@ -77,6 +77,9 @@ struct HomeView<ViewModel: HomeViewModel>: View {
 
 #Preview {
     HomeView(
-        viewModel: HomeProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+        viewModel: HomeProcessor(ops: CostControlOps(
+            settingsRepo: SettingsRepo(),
+            storageRepo: StorageRepo()
+        ))
     )
 }

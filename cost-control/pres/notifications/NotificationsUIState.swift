@@ -10,17 +10,6 @@ struct NotificationsUIState : Equatable {
 }
 
 extension NotificationsUIState {
-    static let initial = NotificationsUIState(
-        currency: "₽",
-        isReminderEnabled: false,
-        isLimitExceededNotificationEnabled: false,
-        isRandomReportEnabled: false,
-        limitAmount: 100.0,
-        selectedPeriod: NotificationPeriod.day
-    )
-}
-
-extension NotificationsUIState {
     func copy(
         isReminderEnabled: Bool? = nil,
         isLimitExceededNotificationEnabled: Bool? = nil,

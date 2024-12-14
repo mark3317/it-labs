@@ -3,25 +3,15 @@ import SwiftUI
 
 struct CategoriesUIState : Equatable {
     let currency: String
-    let type: TypeTransaction
+    let type: TransactionType
     let selectedCategory: Category?
     let categories: [Category]
     let transactions: [Transaction]
 }
 
 extension CategoriesUIState {
-    static let initial = CategoriesUIState(
-        currency: "₽",
-        type: .expense,
-        selectedCategory: nil,
-        categories: [],
-        transactions: []
-    )
-}
-
-extension CategoriesUIState {
     func copy(
-        typeInput: TypeTransaction? = nil,
+        typeInput: TransactionType? = nil,
         expandedCategory: Category?,
         categories: [Category]? = nil,
         transactions: [Transaction]? = nil

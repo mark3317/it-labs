@@ -3,70 +3,57 @@ import SwiftUI
 struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
-    @State private var amountInput: Double
-    @State private var descriptionInput: String
-    @State private var typeInput: TypeTransaction
-    @State private var dateInput: Date
-    
+    @FocusState private var focusedField: Field?
     private enum Field: Int, CaseIterable {
         case amount, description
-    }
-    @FocusState private var focusedField: Field?
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-        self.amountInput = viewModel.uiState.amount
-        self.descriptionInput = viewModel.uiState.description
-        self.typeInput = viewModel.uiState.type
-        self.dateInput = viewModel.uiState.date
     }
     
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("Сумма")) {
-                    TextField("Введите сумму операции", value: $amountInput, format: .number)
-                        .keyboardType(.decimalPad)
-                        .focused($focusedField, equals: Field.amount)
-                        .onChange(of: amountInput) {
-                            viewModel.editAmount(amountInput)
+                    TextField("Введите сумму операции", value: Binding(
+                        get: { viewModel.uiState.amount },
+                        set: { viewModel.editAmount($0) }
+                    ), format: .number)
+                    .keyboardType(.decimalPad)
+                    .focused($focusedField, equals: Field.amount)
+                    .overlay(
+                        HStack {
+                            Spacer()
+                            Text(viewModel.uiState.currency)
+                                .foregroundColor(.gray)
                         }
-                        .overlay(
-                            HStack {
-                                Spacer()
-                                Text(viewModel.uiState.currency)
-                                    .foregroundColor(.gray)
-                            }
-                        )
+                    )
                 }
                 
                 Section(header: Text("Описание")) {
-                    TextField("Введите описание", text: $descriptionInput)
-                        .focused($focusedField, equals: Field.description)
-                        .onChange(of: descriptionInput) {
-                            viewModel.editDescription(descriptionInput)
-                        }
+                    TextField("Введите описание", text: Binding(
+                        get: { viewModel.uiState.description },
+                        set: { viewModel.editDescription($0) }
+                    ))
+                    .focused($focusedField, equals: Field.description)
                 }
                 
                 Section(header: Text("Дата операции")) {
-                    DatePicker("Выберите дату", selection: $dateInput, displayedComponents: .date)
-                        .datePickerStyle(CompactDatePickerStyle())
-                        .environment(\.locale, Locale(identifier: "ru_RU"))
-                        .onChange(of: dateInput ) {
-                            viewModel.editDate(dateInput)
-                        }
+                    DatePicker("Выберите дату", selection: Binding(
+                        get: { viewModel.uiState.date },
+                        set: { viewModel.editDate($0) }
+                    ), displayedComponents: .date)
+                    .datePickerStyle(CompactDatePickerStyle())
+                    .environment(\.locale, Locale(identifier: "ru_RU"))
                 }
                 
                 Section(header: Text("Тип операции")) {
-                    Picker("Тип", selection: $typeInput) {
-                        ForEach(TypeTransaction.allCases) { type in
+                    Picker("Тип", selection: Binding(
+                        get: { viewModel.uiState.type },
+                        set: { viewModel.editType($0) }
+                    )) {
+                        ForEach(TransactionType.allCases) { type in
                             Text(type.rawValue).tag(type)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: typeInput) {
-                        viewModel.editType(typeInput)
-                    }
                 }
                 
                 Section(header: Text("Категория")) {
@@ -119,17 +106,14 @@ struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
                 }
             }
         }
-        .onChange(of: viewModel.uiState) {
-            amountInput = viewModel.uiState.amount
-            descriptionInput = viewModel.uiState.description
-            typeInput = viewModel.uiState.type
-            dateInput = viewModel.uiState.date
-        }
     }
 }
 
 #Preview {
     AddTransactionView(
-        viewModel: AddTransactionProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+        viewModel: AddTransactionProcessor(ops: CostControlOps(
+            settingsRepo: SettingsRepo(),
+            storageRepo: StorageRepo()
+        ))
     )
 }

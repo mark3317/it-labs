@@ -3,45 +3,32 @@ import SwiftUI
 struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
-    @State private var nameInput: String
-    @State private var typeInput: TypeTransaction
-    @State private var selectedIcon: String
-    @State private var selectedColor: Color
-    
+    @FocusState private var focusedField: Field?
     private enum Field: Int, CaseIterable {
         case name
-    }
-    @FocusState private var focusedField: Field?
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-        self.nameInput = viewModel.uiState.name
-        self.typeInput = viewModel.uiState.type
-        self.selectedIcon = viewModel.uiState.icon
-        self.selectedColor = viewModel.uiState.color
     }
     
     var body: some View {
         NavigationStack {
             Form {
                 Section(header: Text("Название категории")) {
-                    TextField("Введите название категории", text: $nameInput)
-                        .focused($focusedField, equals: Field.name)
-                        .onChange(of: nameInput) {
-                            viewModel.editName(nameInput)
-                        }
+                    TextField("Введите название категории", text: Binding(
+                        get: { viewModel.uiState.name },
+                        set: { viewModel.editName($0) }
+                    ))
+                    .focused($focusedField, equals: Field.name)
                 }
                 
                 Section(header: Text("Тип категории")) {
-                    Picker("Тип", selection: $typeInput) {
-                        ForEach(TypeTransaction.allCases) { type in
+                    Picker("Тип", selection: Binding(
+                        get: { viewModel.uiState.type },
+                        set: { viewModel.editType($0) }
+                    )) {
+                        ForEach(TransactionType.allCases) { type in
                             Text(type.rawValue).tag(type)
                         }
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    .onChange(of: typeInput) {
-                        viewModel.editType(typeInput)
-                    }
                 }
                 
                 Section(header: Text("Иконка")) {
@@ -49,7 +36,7 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
                         ForEach(Category.icons, id: \.self) { icon in
                             ZStack {
                                 Circle()
-                                    .fill(selectedIcon == icon ? selectedColor : Color.gray.opacity(0.3))
+                                    .fill(viewModel.uiState.icon == icon ? viewModel.uiState.color : Color.gray.opacity(0.3))
                                     .frame(width: 50, height: 50)
                                 Image(systemName: icon)
                                     .foregroundColor(.white)
@@ -70,7 +57,7 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
                                 .frame(width: 40, height: 40)
                                 .overlay(
                                     Circle()
-                                        .stroke(Color.white, lineWidth: selectedColor == color ? 3 : 0)
+                                        .stroke(Color.white, lineWidth: viewModel.uiState.color == color ? 3 : 0)
                                 )
                                 .onTapGesture {
                                     viewModel.editColor(color)
@@ -102,17 +89,14 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
                 }
             }
         }
-        .onChange(of: viewModel.uiState) {
-            nameInput = viewModel.uiState.name
-            typeInput = viewModel.uiState.type
-            selectedIcon = viewModel.uiState.icon
-            selectedColor = viewModel.uiState.color
-        }
     }
 }
 
 #Preview {
     AddCategoryView(
-        viewModel: AddCategoryProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+        viewModel: AddCategoryProcessor(ops: CostControlOps(
+            settingsRepo: SettingsRepo(),
+            storageRepo: StorageRepo()
+        ))
     )
 }

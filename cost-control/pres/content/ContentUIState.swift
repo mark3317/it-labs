@@ -5,12 +5,6 @@ struct ContentUIState : Equatable {
 }
 
 extension ContentUIState {
-    static let initial = ContentUIState(
-        darkMode: false
-    )
-}
-
-extension ContentUIState {
     func copy(
         darkMode: Bool? = nil
     ) -> ContentUIState {

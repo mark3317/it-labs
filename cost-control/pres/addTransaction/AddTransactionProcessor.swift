@@ -5,21 +5,15 @@ class AddTransactionProcessor: AddTransactionViewModel {
     @Published private(set) var uiState: AddTransactionUIState
     
     init(ops: CostControlOps) {
-        // Пример данных
-        let foodCategory = Category(name: "Еда", colorHex: Color.red.toHex(), type: .expense, icon: "fork.knife")
-        let salaryCategory = Category(name: "Зарплата", colorHex: Color.green.toHex(), type: .income, icon: "dollarsign.circle")
-        let entertainmentCategory = Category(name: "Развлечения", colorHex: Color.blue.toHex(), type: .expense, icon: "gamecontroller")
-        let investmentCategory = Category(name: "Инвестиции", colorHex: Color.purple.toHex(), type: .income, icon: "chart.bar")
-        
         self.ops = ops
         uiState = .init(
             currency: ops.settings.currency,
             amount: 0,
             description: "",
             date: Date(),
-            type: TypeTransaction.expense,
+            type: TransactionType.expense,
             selectedCategory: nil,
-            categories: [foodCategory, salaryCategory, entertainmentCategory, investmentCategory]
+            categories: ops.categories
         )
     }
     
@@ -45,7 +39,7 @@ class AddTransactionProcessor: AddTransactionViewModel {
         )
     }
     
-    func editType(_ type: TypeTransaction) {
+    func editType(_ type: TransactionType) {
         uiState = uiState.copy(
             type: type,
             category: nil
@@ -61,6 +55,14 @@ class AddTransactionProcessor: AddTransactionViewModel {
     }
     
     func onClickAddTransaction() {
-        print(uiState)
+        Task {
+            await ops.saveTransaction(transaction: Transaction(
+                amount: uiState.amount,
+                description: uiState.description,
+                date: uiState.date,
+                type: uiState.type,
+                category: uiState.selectedCategory
+            ))
+        }
     }
 }

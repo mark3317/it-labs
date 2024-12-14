@@ -9,28 +9,18 @@ struct HomeUIState : Equatable {
 }
 
 extension HomeUIState {
-    static let initial = HomeUIState(
-        currency: "₽",
-        totalIncome: 0,
-        totalExpense: 0,
-        balance: 0,
-        transactions: []
-    )
-}
-
-extension HomeUIState {
     func copy(
         totalIncome: Double? = nil,
         totalExpense: Double? = nil,
         balance: Double? = nil,
-        recentTransactions: [Transaction]? = nil
+        transactions: [Transaction]? = nil
     ) -> HomeUIState {
         let newUiState = HomeUIState(
             currency: self.currency,
             totalIncome: totalIncome ?? self.totalIncome,
             totalExpense: totalExpense ?? self.totalExpense,
             balance: balance ?? self.balance,
-            transactions: recentTransactions ?? self.transactions
+            transactions: transactions ?? self.transactions
         )
         print(newUiState)
         return newUiState

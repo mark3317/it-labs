@@ -3,13 +3,6 @@ import SwiftUI
 struct CategoriesView<ViewModel: CategoriesViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
-    @State private var typeInput: TypeTransaction
-    
-    init(viewModel: ViewModel) {
-        self.viewModel = viewModel
-        self.typeInput = viewModel.uiState.type
-    }
-    
     var filteredCategories: [Category] {
         if let expandedCategory = viewModel.uiState.selectedCategory {
             return [expandedCategory]
@@ -21,20 +14,19 @@ struct CategoriesView<ViewModel: CategoriesViewModel>: View {
     var body: some View {
         NavigationStack {
             VStack {
-                Picker("Тип", selection: $typeInput) {
-                    ForEach(TypeTransaction.allCases) { type in
+                Picker("Тип", selection: Binding(
+                    get: { viewModel.uiState.type },
+                    set: { viewModel.editType($0) }
+                )) {
+                    ForEach(TransactionType.allCases) { type in
                         Text(type.rawValue).tag(type)
                     }
                 }
                 .pickerStyle(SegmentedPickerStyle())
-                .onChange(of: typeInput) {
-                    viewModel.editType(typeInput)
-                }
                 .padding()
                 
                 ScrollView {
                     VStack {
-                        
                         let totalAmount = viewModel.uiState.transactions
                             .filter {
                                 if ($0.category != nil && viewModel.uiState.selectedCategory != nil) {
@@ -57,15 +49,17 @@ struct CategoriesView<ViewModel: CategoriesViewModel>: View {
                                         .filter { $0.type == viewModel.uiState.type }
                                         .filter { $0.category == category }
                                         .reduce(0) { $0 + $1.amount }
-                                    let width = geometry.size.width * (categoryAmount / totalAmount)
-                                    ZStack {
-                                        Rectangle()
-                                            .fill(Color(hex: category.colorHex))
-                                            .frame(width: width)
-                                        Text("\(Int((categoryAmount / totalAmount) * 100))%")
-                                            .font(.caption)
-                                            .foregroundColor(.white)
-                                            .frame(width: width, alignment: .center)
+                                    if (categoryAmount > 0) {
+                                        let width = geometry.size.width * (categoryAmount / totalAmount)
+                                        ZStack {
+                                            Rectangle()
+                                                .fill(Color(hex: category.colorHex))
+                                                .frame(width: width)
+                                            Text("\(Int((categoryAmount / totalAmount) * 100))%")
+                                                .font(.caption)
+                                                .foregroundColor(.white)
+                                                .frame(width: width, alignment: .center)
+                                        }
                                     }
                                 }
                             }
@@ -87,7 +81,7 @@ struct CategoriesView<ViewModel: CategoriesViewModel>: View {
                                                 .font(.caption)
                                                 .lineLimit(1)
                                             let categoryAmount = viewModel.uiState.transactions
-                                                .filter { $0.type == typeInput && $0.category == category }
+                                                .filter { $0.type == viewModel.uiState.type && $0.category == category }
                                                 .reduce(0) { $0 + $1.amount }
                                             Text("\(categoryAmount, specifier: "%.2f") \(viewModel.uiState.currency)")
                                                 .font(.caption2)
@@ -131,14 +125,14 @@ struct CategoriesView<ViewModel: CategoriesViewModel>: View {
                 }
             )
         }
-        .onChange(of: viewModel.uiState) {
-            typeInput = viewModel.uiState.type
-        }
     }
 }
 
 #Preview {
     CategoriesView(
-        viewModel: CategoriesProcessor(ops: CostControlOps(settingsRepo: SettingsRepo()))
+        viewModel: CategoriesProcessor(ops: CostControlOps(
+            settingsRepo: SettingsRepo(),
+            storageRepo: StorageRepo()
+        ))
     )
 }

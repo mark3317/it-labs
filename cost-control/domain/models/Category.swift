@@ -2,11 +2,19 @@ import Foundation
 import SwiftUI
 
 struct Category: Equatable, Identifiable {
-    let id = UUID()
+    let id: UUID
     let name: String
     let colorHex: String
-    let type: TypeTransaction
+    let type: TransactionType
     let icon: String
+    
+    init(name: String, colorHex: String, type: TransactionType, icon: String) {
+        self.id = UUID()
+        self.name = name
+        self.colorHex = colorHex
+        self.type = type
+        self.icon = icon
+    }
 }
 
 extension Category {
@@ -19,7 +27,7 @@ extension Category {
         "star", "dollarsign.circle", "cart", "house", "gift",
         "gamecontroller","book", "car", "bag", "bicycle",
         "camera", "music.note", "wrench", "briefcase", "creditcard",
-        "chart.bar", "tv", "laptopcomputer", "tshirt", "film",
+        "chart.bar", "tv", "fork.knife", "tshirt", "film",
         "umbrella", "flame", "drop", "pawprint", "stethoscope"
     ]
 }

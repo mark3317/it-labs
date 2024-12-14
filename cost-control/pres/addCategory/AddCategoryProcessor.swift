@@ -9,7 +9,7 @@ class AddCategoryProcessor: AddCategoryViewModel {
         uiState = .init(
             name: "",
             color: Category.colors[0],
-            type: TypeTransaction.expense,
+            type: TransactionType.expense,
             icon: Category.icons[0]
         )
     }
@@ -22,7 +22,7 @@ class AddCategoryProcessor: AddCategoryViewModel {
         uiState = uiState.copy(color: color)
     }
     
-    func editType(_ type: TypeTransaction) {
+    func editType(_ type: TransactionType) {
         uiState = uiState.copy(type: type)
     }
     
@@ -31,6 +31,13 @@ class AddCategoryProcessor: AddCategoryViewModel {
     }
     
     func onClickAddCategory() {
-        print("Add category \(uiState)")
+        Task {
+            await ops.saveCategory(category: Category(
+                name: uiState.name,
+                colorHex: uiState.color.toHex(),
+                type: uiState.type,
+                icon: uiState.icon
+            ))
+        }
     }
 }

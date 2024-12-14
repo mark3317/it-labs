@@ -5,7 +5,7 @@ protocol AddTransactionViewModel : ObservableObject {
     func editAmount(_ amount: Double)
     func editDescription(_ description: String)
     func editDate(_ date: Date)
-    func editType(_ type: TypeTransaction)
+    func editType(_ type: TransactionType)
     func editCategory(_ category: Category)
     func onClickAddTransaction()
 }
