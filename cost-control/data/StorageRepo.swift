@@ -51,4 +51,19 @@ class StorageRepo : IStorageRepo {
             modelContext.delete(category)
         }
     }
+    
+    func clearAllData() async {
+        let transactionFetchDescriptor = FetchDescriptor<TransactionEntity>()
+        if let transactions = try? modelContext.fetch(transactionFetchDescriptor) {
+            for transaction in transactions {
+                modelContext.delete(transaction)
+            }
+        }
+        let categoryFetchDescriptor = FetchDescriptor<CategoryEntity>()
+        if let categories = try? modelContext.fetch(categoryFetchDescriptor) {
+            for category in categories {
+                modelContext.delete(category)
+            }
+        }
+    }
 }

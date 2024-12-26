@@ -10,7 +10,8 @@ class AddCategoryProcessor: AddCategoryViewModel {
             name: "",
             color: Category.colors[0],
             type: TransactionType.expense,
-            icon: Category.icons[0]
+            icon: Category.icons[0],
+            isSaved: false
         )
     }
     
@@ -39,5 +40,6 @@ class AddCategoryProcessor: AddCategoryViewModel {
                 icon: uiState.icon
             ))
         }
+        uiState = uiState.copy(isSaved: true)
     }
 }

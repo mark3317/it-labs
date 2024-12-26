@@ -13,7 +13,8 @@ class AddTransactionProcessor: AddTransactionViewModel {
             date: Date(),
             type: TransactionType.expense,
             selectedCategory: nil,
-            categories: ops.categories
+            categories: ops.categories,
+            isSaved: false
         )
     }
     
@@ -64,5 +65,9 @@ class AddTransactionProcessor: AddTransactionViewModel {
                 category: uiState.selectedCategory
             ))
         }
+        uiState = uiState.copy(
+            category: uiState.selectedCategory,
+            isSaved: true
+        )
     }
 }

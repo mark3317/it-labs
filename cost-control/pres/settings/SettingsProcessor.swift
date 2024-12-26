@@ -74,6 +74,9 @@ class SettingsProcessor: SettingsViewModel {
         ops.saveSetting(settings: AppSettings(
             currency: "₽", darkMode: false, enableBiometrics: false
         ))
+        Task {
+            await ops.clearAllData()
+        }
         uiState = uiState.copy(
             isBiometricsEnabled: ops.settings.enableBiometrics,
             isDarkModeEnabled: ops.settings.darkMode,

@@ -3,6 +3,7 @@ import SwiftUI
 struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
+    @Environment(\.presentationMode) var presentationMode
     @FocusState private var focusedField: Field?
     private enum Field: Int, CaseIterable {
         case name
@@ -18,7 +19,7 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
                     ))
                     .focused($focusedField, equals: Field.name)
                 }
-                
+
                 Section(header: Text("Тип категории")) {
                     Picker("Тип", selection: Binding(
                         get: { viewModel.uiState.type },
@@ -30,7 +31,7 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 }
-                
+
                 Section(header: Text("Иконка")) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 16) {
                         ForEach(Category.icons, id: \.self) { icon in
@@ -48,7 +49,7 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
                         }
                     }
                 }
-                
+
                 Section(header: Text("Цвет")) {
                     LazyVGrid(columns: [GridItem(.adaptive(minimum: 40))], spacing: 16) {
                         ForEach(Category.colors, id: \.self) { color in
@@ -81,11 +82,18 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
                     }) {
                         Text("Добавить категорию")
                             .padding()
-                            .background(Color.blue)
+                            .background(viewModel.uiState.name.isEmpty ? Color.gray : Color.blue)
                             .foregroundColor(.white)
                             .cornerRadius(30)
                             .font(.headline)
                     }
+                    .padding()
+                    .disabled(viewModel.uiState.name.isEmpty)
+                }
+            }
+            .onChange(of: viewModel.uiState.isSaved) {
+                if viewModel.uiState.isSaved {
+                    presentationMode.wrappedValue.dismiss()
                 }
             }
         }

@@ -9,6 +9,7 @@ struct AddTransactionUIState: Equatable {
     let type: TransactionType
     let selectedCategory: Category?
     let categories: [Category]
+    let isSaved: Bool
 }
 
 extension AddTransactionUIState {
@@ -18,7 +19,8 @@ extension AddTransactionUIState {
         date: Date? = nil,
         type: TransactionType? = nil,
         category: Category?,
-        categories: [Category]? = nil
+        categories: [Category]? = nil,
+        isSaved: Bool? = nil
     ) -> AddTransactionUIState {
         let newUiState = AddTransactionUIState(
             currency: self.currency,
@@ -27,7 +29,8 @@ extension AddTransactionUIState {
             date: date ?? self.date,
             type: type ?? self.type,
             selectedCategory: category,
-            categories: categories ?? self.categories
+            categories: categories ?? self.categories,
+            isSaved: isSaved ?? self.isSaved
         )
         print(newUiState)
         return newUiState

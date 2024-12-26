@@ -8,4 +8,5 @@ protocol IStorageRepo {
     func createCategory(category: Category) async
     func fetchCategories() async -> [Category]
     func deleteCategory(id: UUID) async
+    func clearAllData() async
 }

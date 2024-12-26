@@ -41,6 +41,14 @@ final class CostControlOps : ObservableObject {
         }
     }
     
+    func clearAllData() async {
+        await storageRepo.clearAllData()
+        await MainActor.run {
+            self.transactions = []
+            self.categories = []
+        }
+    }
+    
     func saveSetting(settings: AppSettings) {
         settingsRepo.saveSettings(settings: settings)
         self.settings = settings

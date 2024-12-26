@@ -20,8 +20,7 @@ struct Category: Equatable, Identifiable {
 extension Category {
     static let colors: [Color] = [
         .blue, .red, .green, .yellow, .orange, .pink,
-        .purple, .teal, .gray, .brown, .indigo, .cyan,
-        .mint, .black
+        .purple, .teal, .brown, .indigo, .cyan, .mint
     ]
     static let icons = [
         "star", "dollarsign.circle", "cart", "house", "gift",

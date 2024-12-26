@@ -3,6 +3,7 @@ import SwiftUI
 struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
+    @Environment(\.presentationMode) var presentationMode
     @FocusState private var focusedField: Field?
     private enum Field: Int, CaseIterable {
         case amount, description
@@ -97,12 +98,18 @@ struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
                         Text("Добавить операцию")
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .background(Color.blue)
+                            .background(viewModel.uiState.amount.isZero || viewModel.uiState.description.isEmpty ? Color.gray : Color.blue)
                             .foregroundColor(.white)
                             .cornerRadius(30)
                             .font(.headline)
                     }
                     .padding()
+                    .disabled(viewModel.uiState.amount.isZero || viewModel.uiState.description.isEmpty)
+                }
+            }
+            .onChange(of: viewModel.uiState.isSaved) {
+                if viewModel.uiState.isSaved {
+                    presentationMode.wrappedValue.dismiss()
                 }
             }
         }
