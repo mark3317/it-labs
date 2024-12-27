@@ -104,7 +104,8 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
     AddCategoryView(
         viewModel: AddCategoryProcessor(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
-            storageRepo: StorageRepo()
+            storageRepo: StorageRepo(),
+            authRepo: AuthRepo()
         ))
     )
 }

@@ -85,7 +85,8 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
     NotificationsView(
         viewModel: NotificationsProcessor(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
-            storageRepo: StorageRepo()
+            storageRepo: StorageRepo(),
+            authRepo: AuthRepo()
         ))
     )
 }

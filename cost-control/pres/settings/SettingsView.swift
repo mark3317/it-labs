@@ -143,7 +143,8 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
     SettingsView(
         viewModel: SettingsProcessor(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
-            storageRepo: StorageRepo()
+            storageRepo: StorageRepo(),
+            authRepo: AuthRepo()
         ))
     )
 }

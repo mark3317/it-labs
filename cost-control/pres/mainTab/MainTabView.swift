@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ContentView<ViewModel: ContentViewModel>: View {
+struct MainTabView<ViewModel: MainTabViewModel>: View {
     @ObservedObject var viewModel: ViewModel
     
     var body: some View {
@@ -21,15 +21,15 @@ struct ContentView<ViewModel: ContentViewModel>: View {
                     Text("Настройки")
                 }
         }
-        .colorScheme(viewModel.uiState.darkMode ? .dark : .light)
     }
 }
 
 #Preview {
-    ContentView(
-        viewModel: ContentProcessor(ops: CostControlOps(
+    MainTabView(
+        viewModel: MainTabProcessor(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
-            storageRepo: StorageRepo()
+            storageRepo: StorageRepo(),
+            authRepo: AuthRepo()
         ))
     )
 }

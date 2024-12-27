@@ -132,7 +132,8 @@ struct CategoriesView<ViewModel: CategoriesViewModel>: View {
     CategoriesView(
         viewModel: CategoriesProcessor(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
-            storageRepo: StorageRepo()
+            storageRepo: StorageRepo(),
+            authRepo: AuthRepo()
         ))
     )
 }

@@ -1,8 +1,7 @@
 import SwiftUI
 
-class ContentProcessor: ContentViewModel {    
+class MainTabProcessor: MainTabViewModel {    
     @ObservedObject private var ops: CostControlOps
-    @Published private(set) var uiState: ContentUIState
     private(set) var homeViewModel: HomeProcessor
     private(set) var categoriesViewModel: CategoriesProcessor
     private(set) var settingsViewModel: SettingsProcessor
@@ -12,6 +11,5 @@ class ContentProcessor: ContentViewModel {
         homeViewModel = HomeProcessor(ops: ops)
         categoriesViewModel = CategoriesProcessor(ops: ops)
         settingsViewModel = SettingsProcessor(ops: ops)
-        uiState = .init(darkMode: ops.settings.darkMode)
     }
 }

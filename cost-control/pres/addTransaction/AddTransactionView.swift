@@ -120,7 +120,8 @@ struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
     AddTransactionView(
         viewModel: AddTransactionProcessor(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
-            storageRepo: StorageRepo()
+            storageRepo: StorageRepo(),
+            authRepo: AuthRepo()
         ))
     )
 }

@@ -1,7 +1,6 @@
 import Combine
 
-protocol ContentViewModel : ObservableObject {
-    var uiState: ContentUIState { get }
+protocol MainTabViewModel : ObservableObject {
     var homeViewModel: HomeProcessor { get }
     var categoriesViewModel: CategoriesProcessor { get }
     var settingsViewModel: SettingsProcessor { get }

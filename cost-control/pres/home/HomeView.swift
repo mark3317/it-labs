@@ -79,7 +79,8 @@ struct HomeView<ViewModel: HomeViewModel>: View {
     HomeView(
         viewModel: HomeProcessor(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
-            storageRepo: StorageRepo()
+            storageRepo: StorageRepo(),
+            authRepo: AuthRepo()
         ))
     )
 }
