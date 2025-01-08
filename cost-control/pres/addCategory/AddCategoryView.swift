@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct AddCategoryView: View {
+    @ObservedObject var viewModel: AddCategoryViewModel
     
     @Environment(\.presentationMode) var presentationMode
     @FocusState private var focusedField: Field?
@@ -102,7 +102,7 @@ struct AddCategoryView<ViewModel: AddCategoryViewModel>: View {
 
 #Preview {
     AddCategoryView(
-        viewModel: AddCategoryProcessor(ops: CostControlOps(
+        viewModel: AddCategoryViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()

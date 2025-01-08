@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct SettingsView<ViewModel: SettingsViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct SettingsView: View {
+    @ObservedObject var viewModel: SettingsViewModel
     
     var body: some View {
         NavigationStack {
@@ -141,7 +141,7 @@ struct SettingsView<ViewModel: SettingsViewModel>: View {
 
 #Preview {
     SettingsView(
-        viewModel: SettingsProcessor(ops: CostControlOps(
+        viewModel: SettingsViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()

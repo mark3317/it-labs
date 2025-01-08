@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct HomeView<ViewModel: HomeViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct HomeView: View {
+    @ObservedObject var viewModel: HomeViewModel
     
     var body: some View {
         NavigationStack {
@@ -77,7 +77,7 @@ struct HomeView<ViewModel: HomeViewModel>: View {
 
 #Preview {
     HomeView(
-        viewModel: HomeProcessor(ops: CostControlOps(
+        viewModel: HomeViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()

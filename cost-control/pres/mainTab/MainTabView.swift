@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct MainTabView<ViewModel: MainTabViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct MainTabView: View {
+    @ObservedObject var viewModel: MainTabViewModel
     
     var body: some View {
         TabView {
@@ -26,7 +26,7 @@ struct MainTabView<ViewModel: MainTabViewModel>: View {
 
 #Preview {
     MainTabView(
-        viewModel: MainTabProcessor(ops: CostControlOps(
+        viewModel: MainTabViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()

@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct CategoriesView<ViewModel: CategoriesViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct CategoriesView: View {
+    @ObservedObject var viewModel: CategoriesViewModel
     
     var filteredCategories: [Category] {
         if let expandedCategory = viewModel.uiState.selectedCategory {
@@ -130,7 +130,7 @@ struct CategoriesView<ViewModel: CategoriesViewModel>: View {
 
 #Preview {
     CategoriesView(
-        viewModel: CategoriesProcessor(ops: CostControlOps(
+        viewModel: CategoriesViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()

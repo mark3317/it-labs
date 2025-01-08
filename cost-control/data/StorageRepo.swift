@@ -1,6 +1,7 @@
 import Foundation
 import SwiftData
 
+@MainActor
 class StorageRepo : IStorageRepo {
     private let modelContainer: ModelContainer
     private var modelContext: ModelContext

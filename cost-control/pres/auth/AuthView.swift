@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct AuthView<ViewModel: AuthViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct AuthView: View {
+    @ObservedObject var viewModel: AuthViewModel
     
     var body: some View {
         VStack {
@@ -42,7 +42,7 @@ struct AuthView<ViewModel: AuthViewModel>: View {
 
 #Preview {
     AuthView(
-        viewModel: AuthProcessor(ops: CostControlOps(
+        viewModel: AuthViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()

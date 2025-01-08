@@ -1,6 +1,5 @@
 import Foundation
 
-@MainActor
 protocol IStorageRepo {
     func createTransaction(transaction: Transaction) async
     func fetchTransactions() async -> [Transaction]

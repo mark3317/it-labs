@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct NotificationsView<ViewModel: NotificationsViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct NotificationsView: View {
+    @ObservedObject var viewModel: NotificationsViewModel
     
     var body: some View {
         NavigationStack {
@@ -83,7 +83,7 @@ struct NotificationsView<ViewModel: NotificationsViewModel>: View {
 
 #Preview {
     NotificationsView(
-        viewModel: NotificationsProcessor(ops: CostControlOps(
+        viewModel: NotificationsViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()

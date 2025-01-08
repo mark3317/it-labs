@@ -12,9 +12,9 @@ struct CostControlApp: App {
         WindowGroup {
             Group {
                 if (costControlOps.isAuthorized || !costControlOps.settings.enableBiometrics) {
-                    MainTabView(viewModel: MainTabProcessor(ops: costControlOps))
+                    MainTabView(viewModel: MainTabViewModel(ops: costControlOps))
                 } else {
-                    AuthView(viewModel: AuthProcessor(ops: costControlOps))
+                    AuthView(viewModel: AuthViewModel(ops: costControlOps))
                 }
             }
             .colorScheme(costControlOps.settings.darkMode ? .dark : .light)

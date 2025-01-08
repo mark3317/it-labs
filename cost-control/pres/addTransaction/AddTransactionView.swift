@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
-    @ObservedObject var viewModel: ViewModel
+struct AddTransactionView: View {
+    @ObservedObject var viewModel: AddTransactionViewModel
     
     @Environment(\.presentationMode) var presentationMode
     @FocusState private var focusedField: Field?
@@ -118,7 +118,7 @@ struct AddTransactionView<ViewModel: AddTransactionViewModel>: View {
 
 #Preview {
     AddTransactionView(
-        viewModel: AddTransactionProcessor(ops: CostControlOps(
+        viewModel: AddTransactionViewModel(ops: CostControlOps(
             settingsRepo: SettingsRepo(),
             storageRepo: StorageRepo(),
             authRepo: AuthRepo()
