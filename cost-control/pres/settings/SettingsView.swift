@@ -57,7 +57,7 @@ struct SettingsView: View {
                     }
                     
                     Section(header: Text("Системные настройки")) {
-                        NavigationLink(destination: NotificationsView(viewModel: viewModel.notificationsViewModel)) {
+                        NavigationLink(destination: NotificationsView(viewModel: viewModel.notificationsVM)) {
                             HStack {
                                 Image(systemName: "bell.fill")
                                     .foregroundColor(.blue)
@@ -89,46 +89,20 @@ struct SettingsView: View {
                     }
                     
                     Section(header: Text("Конфиденциальность")) {
-                        Button(action: {
-                            viewModel.editAppDescriptionAlertShowed(true)
-                        }) {
+                        NavigationLink(destination: OnboardingView(viewModel: viewModel.onboardingVM)) {
                             HStack {
                                 Image(systemName: "info.circle.fill")
                                     .foregroundStyle(.gray)
                                 Text("О приложении")
                             }
                         }
-                        .foregroundColor(.primary)
-                        .alert(isPresented: Binding(
-                            get: { viewModel.uiState.isAppDescriptionAlertShowed },
-                            set: { viewModel.editAppDescriptionAlertShowed($0) }
-                        )) {
-                            Alert(
-                                title: Text("О приложении"),
-                                message: Text("Это приложение позволяет отслеживать ваши доходы и расходы, а также управлять бюджетом. Вы можете добавлять операции, создавать категории и получать уведомления."),
-                                dismissButton: .default(Text("Ок"))
-                            )
-                        }
                         
-                        Button(action: {
-                            viewModel.editPrivacyPolicyAlertShowed(true)
-                        }) {
+                        NavigationLink(destination: PDFKitView(url: viewModel.uiState.urlPrivacyPolicy)) {
                             HStack {
                                 Image(systemName: "lock.shield.fill")
                                     .foregroundColor(.green)
                                 Text("Политика конфиденциальности")
                             }
-                        }
-                        .foregroundColor(.primary)
-                        .alert(isPresented: Binding(
-                            get: { viewModel.uiState.isPrivacyPolicyAlertShowed },
-                            set: { viewModel.editPrivacyPolicyAlertShowed($0) }
-                        )) {
-                            Alert(
-                                title: Text("Политика конфиденциальности"),
-                                message: Text("Мы ценим вашу конфиденциальность и не передаем ваши данные третьим лицам. Все данные хранятся локально на вашем устройстве."),
-                                dismissButton: .default(Text("Ок"))
-                            )
                         }
                     }
                 }

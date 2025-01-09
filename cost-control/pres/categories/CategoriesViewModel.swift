@@ -3,11 +3,11 @@ import SwiftUI
 class CategoriesViewModel: ObservableObject {
     @ObservedObject private var ops: CostControlOps
     @Published private(set) var uiState: CategoriesUIState
-    private(set) var addCategoryViewModel: AddCategoryViewModel
+    private(set) var addCategoryVM: AddCategoryViewModel
     
     init(ops: CostControlOps) {
         self.ops = ops
-        addCategoryViewModel = AddCategoryViewModel(ops: ops)
+        addCategoryVM = AddCategoryViewModel(ops: ops)
         uiState = .init(
             currency: ops.settings.currency,
             type: .expense,
@@ -20,13 +20,13 @@ class CategoriesViewModel: ObservableObject {
     func editType(_ type: TransactionType) {
         uiState = uiState.copy(
             typeInput: type,
-            expandedCategory: nil
+            selectedCategory: nil
         )
     }
     
     func editExpandedCategory(_ category: Category) {
         uiState = uiState.copy(
-            expandedCategory: category == uiState.selectedCategory ? nil : category
+            selectedCategory: category == uiState.selectedCategory ? nil : category
         )
     }
 }

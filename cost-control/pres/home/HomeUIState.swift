@@ -10,13 +10,14 @@ struct HomeUIState : Equatable {
 
 extension HomeUIState {
     func copy(
+        currency: String? = nil,
         totalIncome: Double? = nil,
         totalExpense: Double? = nil,
         balance: Double? = nil,
         transactions: [Transaction]? = nil
     ) -> HomeUIState {
         let newUiState = HomeUIState(
-            currency: self.currency,
+            currency: currency ?? self.currency,
             totalIncome: totalIncome ?? self.totalIncome,
             totalExpense: totalExpense ?? self.totalExpense,
             balance: balance ?? self.balance,

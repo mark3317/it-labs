@@ -5,17 +5,17 @@ struct MainTabView: View {
     
     var body: some View {
         TabView {
-            HomeView(viewModel: viewModel.homeViewModel)
+            HomeView(viewModel: viewModel.homeVM)
                 .tabItem {
                     Image(systemName: "house.fill")
                     Text("Главная")
                 }
-            CategoriesView(viewModel: viewModel.categoriesViewModel)
+            CategoriesView(viewModel: viewModel.categoriesVM)
                 .tabItem {
                     Image(systemName: "list.bullet.rectangle.fill")
                     Text("Категории")
                 }
-            SettingsView(viewModel: viewModel.settingsViewModel)
+            SettingsView(viewModel: viewModel.settingsVM)
                 .tabItem {
                     Image(systemName: "gearshape.fill")
                     Text("Настройки")

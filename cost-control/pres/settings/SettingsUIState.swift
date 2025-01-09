@@ -6,8 +6,7 @@ struct SettingsUIState : Equatable {
     let currency: String
     let isCurrencyPickerShowed: Bool
     let isResetConfirmationShowed: Bool
-    let isAppDescriptionAlertShowed: Bool
-    let isPrivacyPolicyAlertShowed: Bool
+    let urlPrivacyPolicy: URL
 }
 
 extension SettingsUIState {
@@ -17,8 +16,7 @@ extension SettingsUIState {
         currency: String? = nil,
         isCurrencyPickerShowed: Bool? = nil,
         isResetConfirmationShowed: Bool? = nil,
-        isAppDescriptionAlertShowed: Bool? = nil,
-        isPrivacyPolicyAlertShowed: Bool? = nil
+        urlPrivacyPolicy: URL? = nil
     ) -> SettingsUIState {
         let newUiState = SettingsUIState(
             isBiometricsEnabled: isBiometricsEnabled ?? self.isBiometricsEnabled,
@@ -26,8 +24,7 @@ extension SettingsUIState {
             currency: currency ?? self.currency,
             isCurrencyPickerShowed: isCurrencyPickerShowed ?? self.isCurrencyPickerShowed,
             isResetConfirmationShowed: isResetConfirmationShowed ?? self.isResetConfirmationShowed,
-            isAppDescriptionAlertShowed: isAppDescriptionAlertShowed ?? self.isAppDescriptionAlertShowed,
-            isPrivacyPolicyAlertShowed: isPrivacyPolicyAlertShowed ?? self.isPrivacyPolicyAlertShowed
+            urlPrivacyPolicy: urlPrivacyPolicy ?? self.urlPrivacyPolicy
         )
         print(newUiState)
         return newUiState

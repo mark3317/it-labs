@@ -14,6 +14,7 @@ struct AddTransactionUIState: Equatable {
 
 extension AddTransactionUIState {
     func copy(
+        currency: String? = nil,
         amount: Double? = nil,
         description: String? = nil,
         date: Date? = nil,
@@ -23,7 +24,7 @@ extension AddTransactionUIState {
         isSaved: Bool? = nil
     ) -> AddTransactionUIState {
         let newUiState = AddTransactionUIState(
-            currency: self.currency,
+            currency: currency ?? self.currency,
             amount: amount ?? self.amount,
             description: description ?? self.description,
             date: date ?? self.date,

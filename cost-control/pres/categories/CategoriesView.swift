@@ -4,8 +4,8 @@ struct CategoriesView: View {
     @ObservedObject var viewModel: CategoriesViewModel
     
     var filteredCategories: [Category] {
-        if let expandedCategory = viewModel.uiState.selectedCategory {
-            return [expandedCategory]
+        if let selectedCategory = viewModel.uiState.selectedCategory {
+            return [selectedCategory]
         } else {
             return viewModel.uiState.categories.filter { $0.type == viewModel.uiState.type }
         }
@@ -118,7 +118,7 @@ struct CategoriesView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: NavigationLink(
-                    destination: AddCategoryView(viewModel: viewModel.addCategoryViewModel)
+                    destination: AddCategoryView(viewModel: viewModel.addCategoryVM)
                 ) {
                     Image(systemName: "plus")
                         .imageScale(.large)

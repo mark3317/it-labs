@@ -11,15 +11,16 @@ struct CategoriesUIState : Equatable {
 
 extension CategoriesUIState {
     func copy(
+        currency: String? = nil,
         typeInput: TransactionType? = nil,
-        expandedCategory: Category?,
+        selectedCategory: Category?,
         categories: [Category]? = nil,
         transactions: [Transaction]? = nil
     ) -> CategoriesUIState {
         let newUiState = CategoriesUIState(
-            currency: self.currency,
+            currency: currency ?? self.currency,
             type: typeInput ?? self.type,
-            selectedCategory: expandedCategory,
+            selectedCategory: selectedCategory,
             categories: categories ?? self.categories,
             transactions: transactions ?? self.transactions
         )

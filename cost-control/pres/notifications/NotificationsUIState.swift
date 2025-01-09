@@ -11,6 +11,7 @@ struct NotificationsUIState : Equatable {
 
 extension NotificationsUIState {
     func copy(
+        currency: String? = nil,
         isReminderEnabled: Bool? = nil,
         isLimitExceededNotificationEnabled: Bool? = nil,
         isRandomReportEnabled: Bool? = nil,
@@ -18,7 +19,7 @@ extension NotificationsUIState {
         selectedPeriod: NotificationPeriod? = nil
     ) -> NotificationsUIState {
         let newUiState = NotificationsUIState(
-            currency: self.currency,
+            currency: currency ?? self.currency,
             isReminderEnabled: isReminderEnabled ?? self.isReminderEnabled,
             isLimitExceededNotificationEnabled: isLimitExceededNotificationEnabled ?? self.isLimitExceededNotificationEnabled,
             isRandomReportEnabled: isRandomReportEnabled ?? self.isRandomReportEnabled,

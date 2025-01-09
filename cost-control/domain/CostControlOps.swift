@@ -61,9 +61,14 @@ final class CostControlOps : ObservableObject {
     
     func authenticate() async {
         let result = await authRepo.authenticate()
-        
         await MainActor.run {
             self.isAuthorized = result
         }
+    }
+    
+    func markViewOnboarding(viewedOnboarding: Bool) {
+        let newSettings = settings.copy(viewedOnboarding: viewedOnboarding)
+        settingsRepo.saveSettings(settings: newSettings)
+        self.settings = newSettings
     }
 }

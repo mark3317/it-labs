@@ -65,7 +65,7 @@ struct HomeView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarItems(
                 trailing: NavigationLink(
-                    destination: AddTransactionView(viewModel: viewModel.addTransactionViewModel)
+                    destination: AddTransactionView(viewModel: viewModel.addTransactionVM)
                 ) {
                     Image(systemName: "plus")
                         .imageScale(.large)

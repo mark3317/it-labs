@@ -2,14 +2,14 @@ import SwiftUI
 
 class MainTabViewModel: ObservableObject {    
     @ObservedObject private var ops: CostControlOps
-    private(set) var homeViewModel: HomeViewModel
-    private(set) var categoriesViewModel: CategoriesViewModel
-    private(set) var settingsViewModel: SettingsViewModel
+    private(set) var homeVM: HomeViewModel
+    private(set) var categoriesVM: CategoriesViewModel
+    private(set) var settingsVM: SettingsViewModel
     
     init(ops: CostControlOps) {
         self.ops = ops
-        homeViewModel = HomeViewModel(ops: ops)
-        categoriesViewModel = CategoriesViewModel(ops: ops)
-        settingsViewModel = SettingsViewModel(ops: ops)
+        homeVM = HomeViewModel(ops: ops)
+        categoriesVM = CategoriesViewModel(ops: ops)
+        settingsVM = SettingsViewModel(ops: ops)
     }
 }
