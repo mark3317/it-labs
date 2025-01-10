@@ -3,7 +3,7 @@ import SwiftUI
 struct AddTransactionView: View {
     @ObservedObject var viewModel: AddTransactionViewModel
     
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @FocusState private var focusedField: Field?
     private enum Field: Int, CaseIterable {
         case amount, description
@@ -57,26 +57,29 @@ struct AddTransactionView: View {
                     .pickerStyle(SegmentedPickerStyle())
                 }
                 
-                Section(header: Text("Категория")) {
-                    LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 16) {
-                        ForEach(
-                            viewModel.uiState.categories.filter { $0.type == viewModel.uiState.type }
-                        ) { category in
-                            VStack {
-                                ZStack {
-                                    Circle()
-                                        .fill(viewModel.uiState.selectedCategory == category ? Color(hex: category.colorHex) : Color.gray.opacity(0.3))
-                                        .frame(width: 60, height: 60)
-                                    Image(systemName: category.icon)
-                                        .foregroundColor(.white)
-                                        .font(.system(size: 24))
+                let categoriesOfSelectedType = viewModel.uiState.categories.filter {
+                    $0.type == viewModel.uiState.type
+                }
+                if (!categoriesOfSelectedType.isEmpty) {
+                    Section(header: Text("Категория")) {
+                        LazyVGrid(columns: [GridItem(.adaptive(minimum: 80))], spacing: 16) {
+                            ForEach(categoriesOfSelectedType) { category in
+                                VStack {
+                                    ZStack {
+                                        Circle()
+                                            .fill(viewModel.uiState.selectedCategory == category ? Color(hex: category.colorHex) : Color.gray.opacity(0.3))
+                                            .frame(width: 60, height: 60)
+                                        Image(systemName: category.icon)
+                                            .foregroundColor(.white)
+                                            .font(.system(size: 24))
+                                    }
+                                    Text(category.name)
+                                        .font(.caption)
+                                        .foregroundColor(.primary)
                                 }
-                                Text(category.name)
-                                    .font(.caption)
-                                    .foregroundColor(.primary)
-                            }
-                            .onTapGesture {
-                                viewModel.editCategory(category)
+                                .onTapGesture {
+                                    viewModel.editCategory(category)
+                                }
                             }
                         }
                     }
@@ -94,9 +97,9 @@ struct AddTransactionView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Button(action: {
                         viewModel.onClickAddTransaction()
+                        dismiss()
                     }) {
                         Text("Добавить операцию")
-                            .frame(maxWidth: .infinity)
                             .padding()
                             .background(viewModel.uiState.amount.isZero || viewModel.uiState.description.isEmpty ? Color.gray : Color.blue)
                             .foregroundColor(.white)
@@ -105,11 +108,6 @@ struct AddTransactionView: View {
                     }
                     .padding()
                     .disabled(viewModel.uiState.amount.isZero || viewModel.uiState.description.isEmpty)
-                }
-            }
-            .onChange(of: viewModel.uiState.isSaved) {
-                if viewModel.uiState.isSaved {
-                    presentationMode.wrappedValue.dismiss()
                 }
             }
         }

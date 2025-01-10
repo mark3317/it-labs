@@ -3,7 +3,7 @@ import SwiftUI
 struct AddCategoryView: View {
     @ObservedObject var viewModel: AddCategoryViewModel
     
-    @Environment(\.presentationMode) var presentationMode
+    @Environment(\.dismiss) private var dismiss
     @FocusState private var focusedField: Field?
     private enum Field: Int, CaseIterable {
         case name
@@ -79,6 +79,7 @@ struct AddCategoryView: View {
                 ToolbarItem(placement: .bottomBar) {
                     Button(action: {
                         viewModel.onClickAddCategory()
+                        dismiss()
                     }) {
                         Text("Добавить категорию")
                             .padding()
@@ -89,11 +90,6 @@ struct AddCategoryView: View {
                     }
                     .padding()
                     .disabled(viewModel.uiState.name.isEmpty)
-                }
-            }
-            .onChange(of: viewModel.uiState.isSaved) {
-                if viewModel.uiState.isSaved {
-                    presentationMode.wrappedValue.dismiss()
                 }
             }
         }

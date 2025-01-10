@@ -71,7 +71,7 @@ struct SettingsView: View {
                             HStack {
                                 Image(systemName: "faceid")
                                     .foregroundColor(.green)
-                                Text("Face ID / Touch ID")
+                                Text("Face / Touch ID")
                             }
                         }
                         Toggle(isOn: Binding(

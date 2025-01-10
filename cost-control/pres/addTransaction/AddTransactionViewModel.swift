@@ -13,13 +13,12 @@ class AddTransactionViewModel: ObservableObject {
             date: Date(),
             type: TransactionType.expense,
             selectedCategory: nil,
-            categories: ops.categories,
-            isSaved: false
+            categories: ops.categories
         )
     }
     
     func editAmount(_ amount: Double) {
-        let roundedAmount = (amount * 100).rounded() / 100
+        let roundedAmount = round(amount * 100) / 100
         uiState = uiState.copy(
             amount: roundedAmount,
             category: uiState.selectedCategory
@@ -65,9 +64,5 @@ class AddTransactionViewModel: ObservableObject {
                 category: uiState.selectedCategory
             ))
         }
-        uiState = uiState.copy(
-            category: uiState.selectedCategory,
-            isSaved: true
-        )
     }
 }

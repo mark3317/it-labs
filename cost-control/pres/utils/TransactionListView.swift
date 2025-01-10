@@ -21,7 +21,7 @@ struct TransactionListView: View {
                         .font(.title3)
                         .fontWeight(.semibold)
                         .padding(8)
-                    ForEach(groupedTransactions[date] ?? []) { transaction in
+                    ForEach(groupedTransactions[date]?.sorted(by: { $0.date > $1.date }) ?? []) { transaction in
                         Divider()
                         HStack {
                             if let category = transaction.category {

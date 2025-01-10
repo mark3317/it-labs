@@ -65,13 +65,13 @@ struct NotificationsView: View {
                 // Секция случайных отчетов
                 Section(
                     header: Text("Отчеты"),
-                    footer: Text("В конце каждой недели будет отправлен случайный короткий отчет по вашим операциям")
+                    footer: Text("В конце каждой недели будет отправлен короткий отчет по вашим операциям")
                 ) {
                     Toggle(isOn: Binding(
                         get: { viewModel.uiState.isRandomReportEnabled },
                         set: { viewModel.editRandomReportEnabled($0) }
                     )) {
-                        Text("Случайные отчеты")
+                        Text("Еженедельные отчеты")
                     }
                 }
             }

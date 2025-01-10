@@ -21,10 +21,8 @@ struct AuthView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    viewModel.authenticateUser()
-                }) {
-                    Text("Face/Touch ID")
+                Button(action: viewModel.authenticateUser) {
+                    Text("Face / Touch ID")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .background(Color.blue)
@@ -32,12 +30,9 @@ struct AuthView: View {
                         .cornerRadius(30)
                         .font(.headline)
                 }
-                .padding(.horizontal, 20)
-                .padding(.bottom, 50)
+                .padding()
             }
-            .onAppear {
-                viewModel.authenticateUser()
-            }
+            .onAppear(perform: viewModel.authenticateUser)
         }
     }
 }

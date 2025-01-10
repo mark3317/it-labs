@@ -13,7 +13,7 @@ class CategoriesViewModel: ObservableObject {
             type: .expense,
             selectedCategory: nil,
             categories: ops.categories,
-            transactions: ops.transactions
+            transactions: ops.transactions.filter{ $0.category != nil }
         )
     }
     

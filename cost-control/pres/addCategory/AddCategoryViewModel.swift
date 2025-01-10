@@ -10,8 +10,7 @@ class AddCategoryViewModel: ObservableObject {
             name: "",
             color: Category.colors[0],
             type: TransactionType.expense,
-            icon: Category.icons[0],
-            isSaved: false
+            icon: Category.icons[0]
         )
     }
     
@@ -40,6 +39,5 @@ class AddCategoryViewModel: ObservableObject {
                 icon: uiState.icon
             ))
         }
-        uiState = uiState.copy(isSaved: true)
     }
 }

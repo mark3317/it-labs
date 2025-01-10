@@ -55,7 +55,7 @@ struct CategoriesView: View {
                                             Rectangle()
                                                 .fill(Color(hex: category.colorHex))
                                                 .frame(width: width)
-                                            Text("\(Int((categoryAmount / totalAmount) * 100))%")
+                                            Text("\(Int(round((categoryAmount / totalAmount) * 100)))%")
                                                 .font(.caption)
                                                 .foregroundColor(.white)
                                                 .frame(width: width, alignment: .center)
@@ -105,12 +105,16 @@ struct CategoriesView: View {
                             .padding()
                         }
                         
-                        TransactionListView(
-                            title: "Операции по категориям",
-                            transactions: viewModel.uiState.transactions.filter { transaction in
-                                filteredCategories.contains { $0 == transaction.category }
-                            },
-                            currency: viewModel.uiState.currency)
+                        let transactionOfFilteredCategory = viewModel.uiState.transactions.filter { transaction in
+                            filteredCategories.contains { $0 == transaction.category }
+                        }
+                        if (!transactionOfFilteredCategory.isEmpty) {
+                            TransactionListView(
+                                title: "Операции по категориям",
+                                transactions: transactionOfFilteredCategory,
+                                currency: viewModel.uiState.currency
+                            )
+                        }
                     }
                 }
             }
